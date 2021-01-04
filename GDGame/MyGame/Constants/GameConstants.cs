@@ -17,6 +17,7 @@ namespace GDGame
         public static readonly string Primitive_UnlitTexturedQuad = "unlit textured quad";
         public static readonly string Primitive_LitTexturedQuad = "lit textured quad";
         public static readonly string Primitive_LitTexturedPyramid = "lit textured pyramid";
+        public static readonly string Primitive_LitTexturedCube = "lit textured cube";
 
         public static readonly string Effect_UnlitTextured = "unlit textured";
         public static readonly string Effect_LitTextured = "lit textured";
@@ -26,11 +27,14 @@ namespace GDGame
         public static readonly string Camera_NonCollidableFlight = "Noncollidable Flight";
         public static readonly string Camera_NonCollidableSecurity = "Noncollidable security";
         public static readonly string Camera_NonCollidableCurveMainArena = "Noncollidable curve - main arena";
+        public static readonly string Camera_CollidableThirdPerson = "Collidable Third Person";
 
-        public static readonly string Controllers_NonCollidableFirstPerson = "1st person controller A";
-        public static readonly string Controllers_NonCollidableFlight = "Flight controller A";
+        public static readonly string Controllers_NonCollidableFirstPerson = "1st person controller";
+        public static readonly string Controllers_NonCollidableFlight = "Flight controller";
         public static readonly string Controllers_NonCollidableSecurity = "pan controller";
         public static readonly string Controllers_NonCollidableCurveMainArena = "main arena - fly through - 1";
+        public static readonly string Controllers_CollidableThirdPerson = "3rd person controller";
+
         #endregion String IDs
 
         #region Collidable First Person Camera
@@ -82,5 +86,13 @@ namespace GDGame
         public static readonly float carRotateSpeed = 0.06f;
 
         #endregion Car
+
+        #region Player
+
+        public static readonly float playerMoveSpeed = 0.05f;
+        public static readonly float playerStrafeSpeed = strafeSpeedMultiplier * moveSpeed;
+        public static readonly float playerRotateSpeed = 0.04f;
+
+        #endregion Player
     }
 }

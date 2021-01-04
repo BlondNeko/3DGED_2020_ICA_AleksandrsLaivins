@@ -14,16 +14,19 @@ namespace GDLibrary.Actors
     {
         private readonly EffectParameters effectParameters;
         #region Variables
+
         //the skin used to wrap the object
         private ICollisionPrimitive collisionPrimitive;
 
         //the object that im colliding with
         private Actor collidee;
+
         private ObjectManager objectManager;
 
         #endregion Variables
 
         #region Properties
+
         //returns a reference to whatever this object is colliding against
         public Actor Collidee
         {
@@ -36,6 +39,7 @@ namespace GDLibrary.Actors
                 collidee = value;
             }
         }
+
         public ICollisionPrimitive CollisionPrimitive
         {
             get
@@ -47,6 +51,7 @@ namespace GDLibrary.Actors
                 collisionPrimitive = value;
             }
         }
+
         public ObjectManager ObjectManager
         {
             get
@@ -131,6 +136,17 @@ namespace GDLibrary.Actors
             return null;
         }
 
+        public override void Update(GameTime gameTime)
+        {
+            //update collision primitive with new object position
+            if (collisionPrimitive != null)
+            {
+                collisionPrimitive.Update(gameTime, Transform3D);
+            }
+
+            base.Update(gameTime);
+        }
+
         //apply suggested movement since no collision will occur if the player moves to that position
         protected virtual void ApplyInput(GameTime gameTime)
         {
@@ -138,11 +154,13 @@ namespace GDLibrary.Actors
             if (Transform3D.TranslateIncrement != Vector3.Zero)
             {
                 Transform3D.TranslateBy(Transform3D.TranslateIncrement);
+                Transform3D.TranslateIncrement = Vector3.Zero;
             }
 
             if (Transform3D.RotateIncrement != 0)
             {
                 Transform3D.RotateAroundUpBy(Transform3D.RotateIncrement);
+                Transform3D.RotateIncrement = 0;
             }
         }
 

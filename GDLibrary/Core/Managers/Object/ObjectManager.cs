@@ -195,13 +195,19 @@ namespace GDLibrary.Managers
             if (actor == null)
                 return;
 
-            if (actor.EffectParameters.Alpha < 1)
-            {
-                transparentList.Add(actor);
-            }
+            //collidable zone object has no effect parameters
+            if (actor.EffectParameters == null)
+                opaqueList.Add(actor);
             else
             {
-                opaqueList.Add(actor);
+                if (actor.EffectParameters.Alpha < 1)
+                {
+                    transparentList.Add(actor);
+                }
+                else
+                {
+                    opaqueList.Add(actor);
+                }
             }
         }
 

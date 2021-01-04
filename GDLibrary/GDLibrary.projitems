@@ -18,6 +18,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)Core\Actors\Drawn\2D\UIMouseObject.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Core\Actors\Drawn\2D\UITextObject.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Core\Actors\Drawn\2D\UITextureObject.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Core\GDDebug\BoundingBoxDrawer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Core\GDDebug\PrimitiveDebugDrawer.cs" />
     <Compile Include="..\GDLibrary\Core\Actors\Drawn\3D\Collidable\CollidableZoneObject.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Core\Actors\Drawn\3D\Collidable\CollidablePickupObject.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Core\Actors\Drawn\3D\Collidable\CollidablePrimitiveObject.cs" />

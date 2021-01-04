@@ -7,7 +7,7 @@ using GDLibrary.Parameters;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 
-namespace GDLibrary
+namespace GDLibrary.MyGame
 {
     /// <summary>
     /// Moveable, collidable player using keyboard and checks for collisions
@@ -91,11 +91,12 @@ namespace GDLibrary
                 CollidableZoneObject simpleZoneObject = collidee as CollidableZoneObject;
 
                 //do something based on the zone type - see Main::InitializeCollidableZones() for ID
-                if (simpleZoneObject.ID.Equals("camera trigger zone 1"))
+                if (simpleZoneObject.ID.Equals("sound and camera trigger zone 1"))
                 {
                     //publish an event e.g sound, health progress
-                    object[] additionalParameters = { "boing" };
-                    EventDispatcher.Publish(new EventData(EventCategoryType.Sound, EventActionType.OnPlay, additionalParameters));
+                    object[] parameters = { "smokealarm" };
+                    EventDispatcher.Publish(new EventData(EventCategoryType.Sound,
+                        EventActionType.OnPlay2D, parameters));
                 }
 
                 //IMPORTANT - setting this to null means that the ApplyInput() method will get called and the player can move through the zone.

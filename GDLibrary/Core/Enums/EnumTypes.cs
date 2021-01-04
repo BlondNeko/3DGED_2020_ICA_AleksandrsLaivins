@@ -43,6 +43,8 @@
         UITextureObject,
         UIText,
         UIMouse,
+        CollidableZone,
+        CollidablePlayer,
     }
 
     /// <summary>

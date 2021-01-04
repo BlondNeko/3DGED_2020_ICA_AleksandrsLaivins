@@ -3,7 +3,6 @@ using GDLibrary.Enums;
 using GDLibrary.Interfaces;
 using GDLibrary.Managers;
 using Microsoft.Xna.Framework;
-using System;
 
 namespace GDLibrary.Core.Controllers
 {
@@ -15,11 +14,11 @@ namespace GDLibrary.Core.Controllers
         private Vector3 oldCameraTranslation;
         private float lerpSpeed;
         private MouseManager mouseManager;
-        #endregion
+        #endregion Fields
 
-        public ThirdPersonController(string id, ControllerType controllerType, 
-            IActor targetActor, float elevationAngleInDegrees, 
-            float distanceFromTarget, float lerpSpeed, 
+        public ThirdPersonController(string id, ControllerType controllerType,
+            IActor targetActor, float elevationAngleInDegrees,
+            float distanceFromTarget, float lerpSpeed,
             MouseManager mouseManager) : base(id, controllerType, targetActor)
         {
             this.elevationAngleInDegrees = elevationAngleInDegrees;
@@ -40,7 +39,7 @@ namespace GDLibrary.Core.Controllers
         private void UpdateDistanceElevation(GameTime gameTime)
         {
             int delta = this.mouseManager.GetDeltaFromScrollWheel();
-           // this.distanceFromTarget += gameTime.ElapsedGameTime.Milliseconds * delta / 100;
+            // this.distanceFromTarget += gameTime.ElapsedGameTime.Milliseconds * delta / 100;
             this.elevationAngleInDegrees += gameTime.ElapsedGameTime.Milliseconds * delta / 1000;
         }
 
@@ -68,7 +67,6 @@ namespace GDLibrary.Core.Controllers
 
                 //store the old camera for the next round of lerp in next update(
                 this.oldCameraTranslation = parent.Transform3D.Translation;
-
             }
         }
     }

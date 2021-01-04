@@ -52,59 +52,59 @@ namespace GDLibrary.Parameters
 
         public bool Intersects(ICollisionPrimitive collisionPrimitive)
         {
-            return collisionPrimitive.Intersects(this.boundingSphere);
+            return collisionPrimitive.Intersects(boundingSphere);
         }
 
         //tests if the bounding sphere for this primitive, when moved, will intersect with the collisionPrimitive passed into the method
         public bool Intersects(ICollisionPrimitive collisionPrimitive, Vector3 translation)
         {
-            BoundingSphere projectedSphere = this.boundingSphere;
+            BoundingSphere projectedSphere = boundingSphere;
             projectedSphere.Center += translation;
             return collisionPrimitive.Intersects(projectedSphere);
         }
 
         public bool Intersects(BoundingBox box)
         {
-            return this.boundingSphere.Intersects(box);
+            return boundingSphere.Intersects(box);
         }
 
         public bool Intersects(BoundingSphere sphere)
         {
-            return this.boundingSphere.Intersects(sphere);
+            return boundingSphere.Intersects(sphere);
         }
 
         public bool Intersects(Ray ray)
         {
-            return (ray.Intersects(this.boundingSphere) > 0);
+            return (ray.Intersects(boundingSphere) > 0);
         }
 
         //detect intersection and passes back distance to intersected primitive
         public bool Intersects(Ray ray, out float? distance)
         {
-            distance = ray.Intersects(this.boundingSphere);
+            distance = ray.Intersects(boundingSphere);
             return (distance > 0);
         }
 
         public bool Intersects(BoundingFrustum frustum)
         {
-            return ((frustum.Contains(this.boundingSphere) == ContainmentType.Contains)
-            || (frustum.Contains(this.boundingSphere) == ContainmentType.Intersects));
+            return ((frustum.Contains(boundingSphere) == ContainmentType.Contains)
+            || (frustum.Contains(boundingSphere) == ContainmentType.Intersects));
         }
 
         public void Update(GameTime gameTime, Transform3D transform)
         {
-            this.boundingSphere = new BoundingSphere(transform.Translation, this.radius);
+            boundingSphere = new BoundingSphere(transform.Translation, radius);
         }
 
         public override string ToString()
         {
-            return this.boundingSphere.ToString();
+            return boundingSphere.ToString();
         }
 
         public object Clone()
         {
-            return new SphereCollisionPrimitive((Transform3D)this.Transform3D.Clone(),
-                this.Radius);
+            return new SphereCollisionPrimitive((Transform3D)Transform3D.Clone(),
+                Radius);
         }
     }
 }
