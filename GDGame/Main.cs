@@ -213,7 +213,7 @@ namespace GDGame
         {
             float worldScale = 2000;
             //set game title
-            Window.Title = "My Amazing Game";
+            Window.Title = "Void Schism";
 
             //graphic settings - see https://en.wikipedia.org/wiki/Display_resolution#/media/File:Vector_Video_Standards8.svg
             InitGraphics(1024, 768);
@@ -759,6 +759,80 @@ namespace GDGame
 
             #endregion Unlit Origin Helper
 
+            #region Lit Textured Star
+
+            /*********** Transform, Vertices and VertexData ***********/
+            //lit star
+            transform3D = new Transform3D(Vector3.Zero, Vector3.Zero,
+                 Vector3.One, Vector3.UnitZ, Vector3.UnitY);
+            effectParameters = new EffectParameters(effectDictionary[GameConstants.Effect_LitTextured],
+                textureDictionary["checkerboard"], Color.White, 1);
+
+            vertices = VertexFactory.GetVerticesPositionNormalTexturedStar(out primitiveType,
+                out primitiveCount);
+
+            //analog of the Model class in G-CA (i.e. it holdes vertices and type, count)
+            vertexData = new VertexData<VertexPositionNormalTexture>(vertices,
+                primitiveType, primitiveCount);
+
+            /*********** PrimitiveObject ***********/
+            //now we use the "FBX" file (our vertexdata) and make a PrimitiveObject
+            primitiveObject = new PrimitiveObject(
+                GameConstants.Primitive_LitTexturedStar,
+                ActorType.Decorator, //we could specify any time e.g. Pickup
+                StatusType.Drawn,
+                transform3D, effectParameters,
+                vertexData);
+
+            /*********** Controllers (optional) ***********/
+            //we could add controllers to the archetype and then all clones would have cloned controllers
+            //  drawnActor3D.ControllerList.Add(
+            //new RotationController("rot controller1", ControllerType.RotationOverTime,
+            //1, new Vector3(0, 1, 0)));
+
+            //to do...add demos of controllers on archetypes
+            //ensure that the Clone() method of PrimitiveObject will Clone() all controllers
+
+            archetypeDictionary.Add(primitiveObject.ID, primitiveObject);
+            #endregion Lit Textured Star
+
+            #region Lit Textured Cylinder
+
+            /*********** Transform, Vertices and VertexData ***********/
+            //lit cylinder
+            transform3D = new Transform3D(Vector3.Zero, Vector3.Zero,
+                 Vector3.One, Vector3.UnitZ, Vector3.UnitY);
+            effectParameters = new EffectParameters(effectDictionary[GameConstants.Effect_LitTextured],
+                textureDictionary["checkerboard"], Color.White, 1);
+
+            vertices = VertexFactory.GetVerticesPositionNormalTexturedCylinder(out primitiveType,
+                out primitiveCount);
+
+            //analog of the Model class in G-CA (i.e. it holdes vertices and type, count)
+            vertexData = new VertexData<VertexPositionNormalTexture>(vertices,
+                primitiveType, primitiveCount);
+
+            /*********** PrimitiveObject ***********/
+            //now we use the "FBX" file (our vertexdata) and make a PrimitiveObject
+            primitiveObject = new PrimitiveObject(
+                GameConstants.Primitive_LitTexturedCylinder,
+                ActorType.Decorator, //we could specify any time e.g. Pickup
+                StatusType.Drawn,
+                transform3D, effectParameters,
+                vertexData);
+
+            /*********** Controllers (optional) ***********/
+            //we could add controllers to the archetype and then all clones would have cloned controllers
+            //  drawnActor3D.ControllerList.Add(
+            //new RotationController("rot controller1", ControllerType.RotationOverTime,
+            //1, new Vector3(0, 1, 0)));
+
+            //to do...add demos of controllers on archetypes
+            //ensure that the Clone() method of PrimitiveObject will Clone() all controllers
+
+            archetypeDictionary.Add(primitiveObject.ID, primitiveObject);
+            #endregion Lit Textured Cylinder
+
             //add more archetypes here...
         }
 
@@ -990,16 +1064,41 @@ namespace GDGame
             drawnActor3D.EffectParameters.Alpha = 0.5f;
 
             //lets add a rotation controller so we can see all sides easily
+            //drawnActor3D.ControllerList.Add(
+            //    new RotationController("rot controller1", ControllerType.RotationOverTime,
+            //    1, new Vector3(0, 1, 0)));
+
             drawnActor3D.ControllerList.Add(
-                new RotationController("rot controller1", ControllerType.RotationOverTime,
-                1, new Vector3(0, 1, 0)));
+               new RotationController("rot controller2", ControllerType.RotationOverTime,
+               10, new Vector3(1, 0, 0)));
+
+            //finally add it into the objectmanager after SIX(!) steps
+            objectManager.Add(drawnActor3D);
+
+            //clone the archetypal pyramid
+            drawnActor3D = archetypeDictionary[GameConstants.Primitive_LitTexturedCylinder].Clone() as PrimitiveObject;
+
+            //change it a bit
+            drawnActor3D.ID = "cylinder1";
+            drawnActor3D.Transform3D.Scale = 20 * new Vector3(2, 4, 2);
+            drawnActor3D.Transform3D.RotationInDegrees = new Vector3(0, 0, 0);
+            drawnActor3D.Transform3D.Translation = new Vector3(0, 10, 100);
+            drawnActor3D.EffectParameters.Alpha = 1f;
+
+            //lets add a rotation controller so we can see all sides easily
+            //drawnActor3D.ControllerList.Add(
+            //    new RotationController("rot controller3", ControllerType.RotationOverTime,
+            //   1, new Vector3(0, 1, 0)));
 
             //drawnActor3D.ControllerList.Add(
-            //   new RotationController("rot controller2", ControllerType.RotationOverTime,
+            //   new RotationController("rot controller4", ControllerType.RotationOverTime,
             //   2, new Vector3(1, 0, 0)));
 
             //finally add it into the objectmanager after SIX(!) steps
             objectManager.Add(drawnActor3D);
+
+
+
         }
 
         private void InitHelpers()
