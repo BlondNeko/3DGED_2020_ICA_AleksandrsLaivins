@@ -803,7 +803,7 @@ namespace GDGame
             transform3D = new Transform3D(Vector3.Zero, Vector3.Zero,
                  Vector3.One, Vector3.UnitZ, Vector3.UnitY);
             effectParameters = new EffectParameters(effectDictionary[GameConstants.Effect_LitTextured],
-                textureDictionary["checkerboard"], Color.White, 1);
+                textureDictionary["checkerboard"], Color.Red, 1);
 
             vertices = VertexFactory.GetVerticesPositionNormalTexturedCylinder(out primitiveType,
                 out primitiveCount);
@@ -1000,6 +1000,8 @@ namespace GDGame
                 vertexData,
                 collisionPrimitive, objectManager);
 
+
+
             //add to the archetype dictionary
             objectManager.Add(collidablePrimitiveObject);
         }
@@ -1052,53 +1054,23 @@ namespace GDGame
         /// </summary>
         private void InitDecorators()
         {
-            //clone the archetypal pyramid
+            //main backdrop
             PrimitiveObject drawnActor3D
-                = archetypeDictionary[GameConstants.Primitive_LitTexturedPyramid].Clone() as PrimitiveObject;
+                = archetypeDictionary[GameConstants.Primitive_LitTexturedCylinder].Clone() as PrimitiveObject;
 
-            //change it a bit
-            drawnActor3D.ID = "pyramid1";
-            drawnActor3D.Transform3D.Scale = 10 * new Vector3(1, 1, 1);
-            drawnActor3D.Transform3D.RotationInDegrees = new Vector3(0, 0, 0);
-            drawnActor3D.Transform3D.Translation = new Vector3(0, 10, 0);
-            drawnActor3D.EffectParameters.Alpha = 0.5f;
-
-            //lets add a rotation controller so we can see all sides easily
-            //drawnActor3D.ControllerList.Add(
-            //    new RotationController("rot controller1", ControllerType.RotationOverTime,
-            //    1, new Vector3(0, 1, 0)));
-
-            drawnActor3D.ControllerList.Add(
-               new RotationController("rot controller2", ControllerType.RotationOverTime,
-               10, new Vector3(1, 0, 0)));
-
-            //finally add it into the objectmanager after SIX(!) steps
-            objectManager.Add(drawnActor3D);
-
-            //clone the archetypal pyramid
-            drawnActor3D = archetypeDictionary[GameConstants.Primitive_LitTexturedCylinder].Clone() as PrimitiveObject;
-
-            //change it a bit
-            drawnActor3D.ID = "cylinder1";
-            drawnActor3D.Transform3D.Scale = 20 * new Vector3(2, 4, 2);
-            drawnActor3D.Transform3D.RotationInDegrees = new Vector3(0, 0, 0);
-            drawnActor3D.Transform3D.Translation = new Vector3(0, 10, 100);
+            drawnActor3D.ActorType = ActorType.Decorator;
+            drawnActor3D.StatusType = StatusType.Drawn | StatusType.Update;
+            drawnActor3D.EffectParameters.Texture = textureDictionary["grass1"];
+            drawnActor3D.Transform3D.RotationInDegrees = new Vector3(0, 0, 90);
+            drawnActor3D.Transform3D.Scale = 100 * new Vector3(2, 1000, 2);
+            drawnActor3D.Transform3D.Translation = new Vector3(500, -100, -600);
             drawnActor3D.EffectParameters.Alpha = 1f;
 
-            //lets add a rotation controller so we can see all sides easily
-            //drawnActor3D.ControllerList.Add(
-            //    new RotationController("rot controller3", ControllerType.RotationOverTime,
-            //   1, new Vector3(0, 1, 0)));
+            drawnActor3D.ControllerList.Add(
+                new RotationController("rot controller1", ControllerType.RotationOverTime,
+               1, new Vector3(0, -1, 0)));
 
-            //drawnActor3D.ControllerList.Add(
-            //   new RotationController("rot controller4", ControllerType.RotationOverTime,
-            //   2, new Vector3(1, 0, 0)));
-
-            //finally add it into the objectmanager after SIX(!) steps
             objectManager.Add(drawnActor3D);
-
-
-
         }
 
         private void InitHelpers()
@@ -1116,6 +1088,7 @@ namespace GDGame
             drawnActor3D.EffectParameters.Texture = textureDictionary["grass1"];
             drawnActor3D.Transform3D.RotationInDegrees = new Vector3(-90, 0, 0);
             drawnActor3D.Transform3D.Scale = worldScale * Vector3.One;
+            drawnActor3D.EffectParameters.Alpha = 0.1f;
             objectManager.Add(drawnActor3D);
         }
 
