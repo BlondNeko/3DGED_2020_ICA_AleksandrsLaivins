@@ -683,6 +683,7 @@ namespace GDLibrary.Factories
             VertexPositionNormalTexture[] vertices
                 = new VertexPositionNormalTexture[3 * primitiveCount]; //3 vertices for every primitive
 
+            //top
             vertices[0] = new VertexPositionNormalTexture(new Vector3(0, 1, 0), new Vector3(0.5f, 0.5f, 0.5f), new Vector2(0, 1));
             vertices[1] = new VertexPositionNormalTexture(new Vector3(1, 0, 0), new Vector3(0.5f, 0.5f, 0.5f), new Vector2(1, 0));
             vertices[2] = new VertexPositionNormalTexture(new Vector3(0, 0, 1), new Vector3(0.5f, 0.5f, 0.5f), new Vector2(1, 1));
@@ -699,8 +700,7 @@ namespace GDLibrary.Factories
             vertices[10] = new VertexPositionNormalTexture(new Vector3(0, 0, 1), new Vector3(-0.5f, 0.5f, 0.5f), new Vector2(1, 0));
             vertices[11] = new VertexPositionNormalTexture(new Vector3(-1, 0, 0), new Vector3(-0.5f, 0.5f, 0.5f), new Vector2(1, 1));
 
-
-
+            //bottom
             vertices[12] = new VertexPositionNormalTexture(new Vector3(0, -1, 0), new Vector3(-0.5f, -0.5f, -0.5f), new Vector2(0, 1));
             vertices[13] = new VertexPositionNormalTexture(new Vector3(0, 0, -1), new Vector3(-0.5f, -0.5f, -0.5f), new Vector2(1, 0));
             vertices[14] = new VertexPositionNormalTexture(new Vector3(-1, 0, 0), new Vector3(-0.5f, -0.5f, -0.5f), new Vector2(1, 1));

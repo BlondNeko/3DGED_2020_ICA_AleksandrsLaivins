@@ -219,7 +219,7 @@ namespace GDGame
             Window.Title = "Void Schism";
 
             //graphic settings - see https://en.wikipedia.org/wiki/Display_resolution#/media/File:Vector_Video_Standards8.svg
-            InitGraphics(1024, 768);
+            InitGraphics(1280, 720);
 
             //note that we moved this from LoadContent to allow InitDebug to be called in Initialize
             _spriteBatch = new SpriteBatch(GraphicsDevice);
@@ -556,7 +556,7 @@ namespace GDGame
         {
             Transform3D transform3D = null;
             Camera3D camera3D = null;
-            Viewport viewPort = new Viewport(0, 0, 1024, 768);
+            Viewport viewPort = new Viewport(0, 0, 1280, 720);
 
             #region Collidable Camera - 3rd Person
 
@@ -565,7 +565,7 @@ namespace GDGame
             camera3D = new Camera3D(GameConstants.Camera_CollidableThirdPerson,
                 ActorType.Camera3D, StatusType.Update, transform3D,
                 ProjectionParameters.StandardDeepSixteenTen,
-                new Viewport(0, 0, 1024, 768));
+                viewPort);
 
             //attach a controller
             camera3D.ControllerList.Add(new ThirdPersonController(
@@ -588,7 +588,7 @@ namespace GDGame
             camera3D = new Camera3D(GameConstants.Camera_NonCollidableFirstPerson,
                 ActorType.Camera3D, StatusType.Update, transform3D,
                 ProjectionParameters.StandardDeepSixteenTen,
-                new Viewport(0, 0, 1024, 768));
+                viewPort);
 
             //attach a controller
             camera3D.ControllerList.Add(new FirstPersonController(
@@ -607,7 +607,7 @@ namespace GDGame
 
             camera3D = new Camera3D(GameConstants.Camera_NonCollidableFlight,
                 ActorType.Camera3D, StatusType.Update, transform3D,
-                ProjectionParameters.StandardDeepSixteenTen, new Viewport(0, 0, 1024, 768));
+                ProjectionParameters.StandardDeepSixteenTen, viewPort);
 
             //attach a controller
             camera3D.ControllerList.Add(new FlightCameraController(
