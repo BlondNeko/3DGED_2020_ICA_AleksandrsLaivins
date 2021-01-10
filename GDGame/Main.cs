@@ -27,6 +27,9 @@ namespace GDGame
     {
         #region Fields
 
+        private int resolutionX = 1280;
+        private int resolutionY = 720;
+
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
 
@@ -219,7 +222,7 @@ namespace GDGame
             Window.Title = "Void Schism";
 
             //graphic settings - see https://en.wikipedia.org/wiki/Display_resolution#/media/File:Vector_Video_Standards8.svg
-            InitGraphics(1280, 720);
+            InitGraphics(resolutionX, resolutionY);
 
             //note that we moved this from LoadContent to allow InitDebug to be called in Initialize
             _spriteBatch = new SpriteBatch(GraphicsDevice);
@@ -556,7 +559,7 @@ namespace GDGame
         {
             Transform3D transform3D = null;
             Camera3D camera3D = null;
-            Viewport viewPort = new Viewport(0, 0, 1280, 720);
+            Viewport viewPort = new Viewport(0, 0, resolutionX, resolutionY);
 
             #region Collidable Camera - 3rd Person
 
