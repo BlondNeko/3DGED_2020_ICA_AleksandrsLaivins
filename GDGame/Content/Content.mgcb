@@ -94,6 +94,30 @@
 /processorParam:TextureFormat=Color
 /build:Assets/Textures/Architecture/Walls/wall.jpg
 
+#begin Assets/Textures/Base/spaceback.jpg
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Assets/Textures/Base/spaceback.jpg
+
+#begin Assets/Textures/Base/texturespace.jpg
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Assets/Textures/Base/texturespace.jpg
+
 #begin Assets/Textures/Foliage/Ground/grass_midlevel.jpg
 /importer:TextureImporter
 /processor:TextureProcessor

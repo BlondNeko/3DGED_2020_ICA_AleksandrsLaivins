@@ -640,136 +640,82 @@ namespace GDLibrary.Factories
                                 out int primitiveCount)
         {
             primitiveType = PrimitiveType.TriangleList; //triangles will be separate
-            primitiveCount = 6; //2x base, 4x sides
+            primitiveCount = 26; //2x base, 4x sides
 
             VertexPositionNormalTexture[] vertices
                 = new VertexPositionNormalTexture[3 * primitiveCount]; //3 vertices for every primitive
 
             /******************************************************/
 
-            #region Underside - Polygon top left
-            //back left
-            vertices[0] = new VertexPositionNormalTexture(
-                new Vector3(-0.5f, 0, -0.5f),
-                -Vector3.UnitY, new Vector2(0, 1)); //Vector2.UnitY
+            #region Bottom
 
-            //front left
-            vertices[1] = new VertexPositionNormalTexture(
-                new Vector3(-0.5f, 0, 0.5f),
-                -Vector3.UnitY, new Vector2(0, 0));
+            vertices[0] = new VertexPositionNormalTexture(new Vector3(-1, 0, 0), -Vector3.UnitY, new Vector2(0, 0));
+            vertices[1] = new VertexPositionNormalTexture(new Vector3(0, -1, 1), -Vector3.UnitY, new Vector2(0, 0));
+            vertices[2] = new VertexPositionNormalTexture(new Vector3(0, -1, -1), -Vector3.UnitY, new Vector2(0, 0));
 
-            //back right
-            vertices[2] = new VertexPositionNormalTexture(
-                new Vector3(0.5f, 0, 0.5f),
-                -Vector3.UnitY, new Vector2(1, 0));
-            #endregion Underside - Polygon top left
+            vertices[3] = new VertexPositionNormalTexture(new Vector3(0, -1, 1), -Vector3.UnitY, new Vector2(0, 0));
+            vertices[4] = new VertexPositionNormalTexture(new Vector3(1, 0, 0), -Vector3.UnitY, new Vector2(0, 0));
+            vertices[5] = new VertexPositionNormalTexture(new Vector3(0, -1, -1), -Vector3.UnitY, new Vector2(0, 0));
 
-            /******************************************************/
+            #endregion Bottom
 
-            #region Underside - Polygon bottom right
-            //underside bottom left
-            vertices[3] = new VertexPositionNormalTexture(
-                new Vector3(-0.5f, 0, -0.5f),
-                -Vector3.UnitY, new Vector2(0, 1)); //Vector2.UnitY
+            vertices[0] = new VertexPositionNormalTexture(new Vector3(-1, 0, 0), -Vector3.UnitY, new Vector2(0, 0));
+            vertices[1] = new VertexPositionNormalTexture(new Vector3(0, -1, 1), -Vector3.UnitY, new Vector2(0, 0));
+            vertices[2] = new VertexPositionNormalTexture(new Vector3(0, -1, -1), -Vector3.UnitY, new Vector2(0, 0));
 
-            //underside top right
-            vertices[4] = new VertexPositionNormalTexture(
-                new Vector3(0.5f, 0, 0.5f),
-                -Vector3.UnitY, new Vector2(1, 0));
+            vertices[3] = new VertexPositionNormalTexture(new Vector3(0, -1, 1), -Vector3.UnitY, new Vector2(0, 0));
+            vertices[4] = new VertexPositionNormalTexture(new Vector3(1, 0, 0), -Vector3.UnitY, new Vector2(0, 0));
+            vertices[5] = new VertexPositionNormalTexture(new Vector3(0, -1, -1), -Vector3.UnitY, new Vector2(0, 0));
 
-            //underside top left
-            vertices[5] = new VertexPositionNormalTexture(
-                new Vector3(0.5f, 0, -0.5f),
-                -Vector3.UnitY, new Vector2(1, 1));
-            #endregion Underside - Polygon bottom right
 
-            /******************************************************/
 
-            #region Polygon left face (-ve X-axis)
-            //bottom left
-            vertices[6] = new VertexPositionNormalTexture(
-                new Vector3(-0.5f, 0, -0.5f),
-                new Vector3(-1, 1, 0), //normal
-                new Vector2(0, 1));
 
-            //top
-            vertices[7] = new VertexPositionNormalTexture(
-                new Vector3(0, 0.5f, 0),
-                new Vector3(-1, 1, 0), //normal
-                new Vector2(0.5f, 0));
+            return vertices;
+        }
 
-            //bottom right
-            vertices[8] = new VertexPositionNormalTexture(
-                new Vector3(-0.5f, 0, 0.5f),
-                new Vector3(-1, 1, 0), //normal
-                new Vector2(1, 1));
-            #endregion Polygon left face (-ve X-axis)
+        public static VertexPositionNormalTexture[] GetVerticesPositionNormalTexturedDiamond(
+                    out PrimitiveType primitiveType,
+                                out int primitiveCount)
+        {
+            primitiveType = PrimitiveType.TriangleList; //triangles will be separate
+            primitiveCount = 8; //2x base, 4x sides
 
-            /******************************************************/
+            VertexPositionNormalTexture[] vertices
+                = new VertexPositionNormalTexture[3 * primitiveCount]; //3 vertices for every primitive
 
-            #region Polygon right face (+ve X-axis)
-            //bottom left
-            vertices[9] = new VertexPositionNormalTexture(
-                new Vector3(0.5f, 0, 0.5f),
-                new Vector3(1, 1, 0), //normal
-                new Vector2(0, 1));
+            vertices[0] = new VertexPositionNormalTexture(new Vector3(0, 1, 0), new Vector3(0.5f, 0.5f, 0.5f), new Vector2(0, 1));
+            vertices[1] = new VertexPositionNormalTexture(new Vector3(1, 0, 0), new Vector3(0.5f, 0.5f, 0.5f), new Vector2(1, 0));
+            vertices[2] = new VertexPositionNormalTexture(new Vector3(0, 0, 1), new Vector3(0.5f, 0.5f, 0.5f), new Vector2(1, 1));
 
-            //top
-            vertices[10] = new VertexPositionNormalTexture(
-                new Vector3(0, 0.5f, 0),
-                new Vector3(1, 1, 0), //normal
-                new Vector2(0.5f, 0));
+            vertices[3] = new VertexPositionNormalTexture(new Vector3(0, 1, 0), new Vector3(-0.5f, 0.5f, -0.5f), new Vector2(0, 1));
+            vertices[4] = new VertexPositionNormalTexture(new Vector3(-1, 0, 0), new Vector3(-0.5f, 0.5f, -0.5f), new Vector2(1, 0));
+            vertices[5] = new VertexPositionNormalTexture(new Vector3(0, 0, -1), new Vector3(-0.5f, 0.5f, -0.5f), new Vector2(1, 1));
 
-            //bottom right
-            vertices[11] = new VertexPositionNormalTexture(
-                new Vector3(0.5f, 0, -0.5f),
-                new Vector3(1, 1, 0), //normal
-                new Vector2(1, 1));
-            #endregion Polygon right face (+ve X-axis)
+            vertices[6] = new VertexPositionNormalTexture(new Vector3(0, 1, 0), new Vector3(0.5f, 0.5f, -0.5f), new Vector2(0, 1));
+            vertices[7] = new VertexPositionNormalTexture(new Vector3(0, 0, -1), new Vector3(0.5f, 0.5f, -0.5f), new Vector2(1, 0));
+            vertices[8] = new VertexPositionNormalTexture(new Vector3(1, 0, 0), new Vector3(0.5f, 0.5f, -0.5f), new Vector2(1, 1));
 
-            /******************************************************/
+            vertices[9] = new VertexPositionNormalTexture(new Vector3(0, 1, 0), new Vector3(-0.5f, 0.5f, 0.5f), new Vector2(0, 1));
+            vertices[10] = new VertexPositionNormalTexture(new Vector3(0, 0, 1), new Vector3(-0.5f, 0.5f, 0.5f), new Vector2(1, 0));
+            vertices[11] = new VertexPositionNormalTexture(new Vector3(-1, 0, 0), new Vector3(-0.5f, 0.5f, 0.5f), new Vector2(1, 1));
 
-            #region Polygon front face (+ve Z-axis)
-            //bottom left
-            vertices[12] = new VertexPositionNormalTexture(
-                new Vector3(-0.5f, 0, 0.5f),
-                new Vector3(0, 1, 1), //normal
-                new Vector2(0, 1));
 
-            //top
-            vertices[13] = new VertexPositionNormalTexture(
-                new Vector3(0, 0.5f, 0),
-                new Vector3(0, 1, 1), //normal
-                new Vector2(0.5f, 0));
 
-            //bottom right
-            vertices[14] = new VertexPositionNormalTexture(
-                new Vector3(0.5f, 0, 0.5f),
-                new Vector3(0, 1, 1), //normal
-                new Vector2(1, 1));
-            #endregion Polygon front face (+ve Z-axis)
+            vertices[12] = new VertexPositionNormalTexture(new Vector3(0, -1, 0), new Vector3(-0.5f, -0.5f, -0.5f), new Vector2(0, 1));
+            vertices[13] = new VertexPositionNormalTexture(new Vector3(0, 0, -1), new Vector3(-0.5f, -0.5f, -0.5f), new Vector2(1, 0));
+            vertices[14] = new VertexPositionNormalTexture(new Vector3(-1, 0, 0), new Vector3(-0.5f, -0.5f, -0.5f), new Vector2(1, 1));
 
-            /******************************************************/
+            vertices[15] = new VertexPositionNormalTexture(new Vector3(0, -1, 0), new Vector3(0.5f, -0.5f, 0.5f), new Vector2(0, 1));
+            vertices[16] = new VertexPositionNormalTexture(new Vector3(0, 0, 1), new Vector3(0.5f, -0.5f, 0.5f), new Vector2(1, 0));
+            vertices[17] = new VertexPositionNormalTexture(new Vector3(1, 0, 0), new Vector3(0.5f, -0.5f, 0.5f), new Vector2(1, 1));
 
-            #region Polygon front face (-ve Z-axis)
-            //bottom left
-            vertices[15] = new VertexPositionNormalTexture(
-                new Vector3(0.5f, 0, -0.5f),
-                new Vector3(0, 1, -1), //normal
-                new Vector2(0, 1));
+            vertices[18] = new VertexPositionNormalTexture(new Vector3(0, -1, 0), new Vector3(0.5f, -0.5f, -0.5f), new Vector2(0, 1));
+            vertices[19] = new VertexPositionNormalTexture(new Vector3(-1, 0, 0), new Vector3(0.5f, -0.5f, -0.5f), new Vector2(1, 0));
+            vertices[20] = new VertexPositionNormalTexture(new Vector3(0, 0, 1), new Vector3(0.5f, -0.5f, -0.5f), new Vector2(1, 1));
 
-            //top
-            vertices[16] = new VertexPositionNormalTexture(
-                new Vector3(0, 0.5f, 0),
-                new Vector3(0, 1, -1), //normal
-                new Vector2(0.5f, 0));
-
-            //bottom right
-            vertices[17] = new VertexPositionNormalTexture(
-                new Vector3(-0.5f, 0, -0.5f),
-                new Vector3(0, 1, -1), //normal
-                new Vector2(1, 1));
-            #endregion Polygon front face (-ve Z-axis)
+            vertices[21] = new VertexPositionNormalTexture(new Vector3(0, -1, 0), new Vector3(-0.5f, -0.5f, 0.5f), new Vector2(0, 1));
+            vertices[22] = new VertexPositionNormalTexture(new Vector3(1, 0, 0), new Vector3(-0.5f, -0.5f, 0.5f), new Vector2(1, 0));
+            vertices[23] = new VertexPositionNormalTexture(new Vector3(0, 0, -1), new Vector3(-0.5f, -0.5f, 0.5f), new Vector2(1, 1));
 
             return vertices;
         }

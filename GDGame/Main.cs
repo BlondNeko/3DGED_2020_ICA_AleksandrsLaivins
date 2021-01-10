@@ -196,6 +196,9 @@ namespace GDGame
             textureDictionary.Load("Assets/Textures/UI/Controls/reticuleDefault");
 
             //add more...
+
+            textureDictionary.Load("Assets/Textures/Base/texturespace");
+            textureDictionary.Load("Assets/Textures/Base/spaceback");
         }
 
         private void LoadFonts()
@@ -833,6 +836,43 @@ namespace GDGame
             archetypeDictionary.Add(primitiveObject.ID, primitiveObject);
             #endregion Lit Textured Cylinder
 
+            #region Lit Textured Diamond
+
+            /*********** Transform, Vertices and VertexData ***********/
+            //lit star
+            transform3D = new Transform3D(Vector3.Zero, Vector3.Zero,
+                 Vector3.One, Vector3.UnitZ, Vector3.UnitY);
+            effectParameters = new EffectParameters(effectDictionary[GameConstants.Effect_LitTextured],
+                textureDictionary["checkerboard"], Color.White, 1);
+
+            vertices = VertexFactory.GetVerticesPositionNormalTexturedDiamond(out primitiveType,
+                out primitiveCount);
+
+            //analog of the Model class in G-CA (i.e. it holdes vertices and type, count)
+            vertexData = new VertexData<VertexPositionNormalTexture>(vertices,
+                primitiveType, primitiveCount);
+
+            /*********** PrimitiveObject ***********/
+            //now we use the "FBX" file (our vertexdata) and make a PrimitiveObject
+            primitiveObject = new PrimitiveObject(
+                GameConstants.Primitive_LitTexturedDiamond,
+                ActorType.Decorator, //we could specify any time e.g. Pickup
+                StatusType.Drawn,
+                transform3D, effectParameters,
+                vertexData);
+
+            /*********** Controllers (optional) ***********/
+            //we could add controllers to the archetype and then all clones would have cloned controllers
+            //  drawnActor3D.ControllerList.Add(
+            //new RotationController("rot controller1", ControllerType.RotationOverTime,
+            //1, new Vector3(0, 1, 0)));
+
+            //to do...add demos of controllers on archetypes
+            //ensure that the Clone() method of PrimitiveObject will Clone() all controllers
+
+            archetypeDictionary.Add(primitiveObject.ID, primitiveObject);
+            #endregion Lit Textured Diamond
+
             //add more archetypes here...
         }
 
@@ -879,7 +919,7 @@ namespace GDGame
                                 20,     //y-axis height offset
                                 new Vector3(-50, 0, -150) //offset to move all new objects by
                                 );
-            objectManager.Add(actorList);
+            //objectManager.Add(actorList);
 
             //clear the list otherwise when we add level1_2 we would re-add level1_1 objects to object manager
             actorList.Clear();
@@ -892,7 +932,7 @@ namespace GDGame
                              40,     //y-axis height offset
                              new Vector3(-50, 0, -150) //offset to move all new objects by
                              );
-            objectManager.Add(actorList);
+            //objectManager.Add(actorList);
         }
 
         #region NEW - 26.12.20
@@ -940,7 +980,7 @@ namespace GDGame
                     GameConstants.playerRotateSpeed,
                     keyboardManager);
 
-            objectManager.Add(collidablePlayerObject);
+            //objectManager.Add(collidablePlayerObject);
         }
 
         private void InitCollidableZones()
@@ -960,7 +1000,7 @@ namespace GDGame
                 transform3D,
                 collisionPrimitive);
 
-            objectManager.Add(collidableZoneObject);
+            //objectManager.Add(collidableZoneObject);
         }
 
         private void InitCollidableProps()
@@ -1003,7 +1043,7 @@ namespace GDGame
 
 
             //add to the archetype dictionary
-            objectManager.Add(collidablePrimitiveObject);
+            //objectManager.Add(collidablePrimitiveObject);
         }
 
         private void InitCollidablePickups()
@@ -1044,7 +1084,7 @@ namespace GDGame
                 collisionPrimitive, objectManager);
 
             //add to the archetype dictionary
-            objectManager.Add(collidablePrimitiveObject);
+            //objectManager.Add(collidablePrimitiveObject);
         }
 
         #endregion NEW - 26.12.20
@@ -1060,9 +1100,9 @@ namespace GDGame
 
             drawnActor3D.ActorType = ActorType.Decorator;
             drawnActor3D.StatusType = StatusType.Drawn | StatusType.Update;
-            drawnActor3D.EffectParameters.Texture = textureDictionary["grass1"];
+            drawnActor3D.EffectParameters.Texture = textureDictionary["texturespace"];
             drawnActor3D.Transform3D.RotationInDegrees = new Vector3(0, 0, 90);
-            drawnActor3D.Transform3D.Scale = 100 * new Vector3(2, 1000, 2);
+            drawnActor3D.Transform3D.Scale = 100 * new Vector3(2, 10, 2);
             drawnActor3D.Transform3D.Translation = new Vector3(500, -100, -600);
             drawnActor3D.EffectParameters.Alpha = 1f;
 
@@ -1071,6 +1111,24 @@ namespace GDGame
                1, new Vector3(0, -1, 0)));
 
             objectManager.Add(drawnActor3D);
+
+            drawnActor3D
+                = archetypeDictionary[GameConstants.Primitive_LitTexturedDiamond].Clone() as PrimitiveObject;
+
+            drawnActor3D.ActorType = ActorType.Decorator;
+            drawnActor3D.StatusType = StatusType.Drawn | StatusType.Update;
+            drawnActor3D.EffectParameters.Texture = textureDictionary["checkerboard"];
+            drawnActor3D.Transform3D.RotationInDegrees = new Vector3(0, 0, 0);
+            drawnActor3D.Transform3D.Scale = 20 * new Vector3(2, 2, 2);
+            drawnActor3D.Transform3D.Translation = new Vector3(0, 0, 0);
+            drawnActor3D.EffectParameters.Alpha = 1f;
+
+            drawnActor3D.ControllerList.Add(
+                new RotationController("rot controller1", ControllerType.RotationOverTime,
+               0f, new Vector3(0, 0, 1)));
+
+            objectManager.Add(drawnActor3D);
+
         }
 
         private void InitHelpers()
@@ -1085,11 +1143,11 @@ namespace GDGame
         {
             PrimitiveObject drawnActor3D = archetypeDictionary[GameConstants.Primitive_UnlitTexturedQuad].Clone() as PrimitiveObject;
             drawnActor3D.ActorType = ActorType.Ground;
-            drawnActor3D.EffectParameters.Texture = textureDictionary["grass1"];
+            //drawnActor3D.EffectParameters.Texture = textureDictionary["grass1"];
             drawnActor3D.Transform3D.RotationInDegrees = new Vector3(-90, 0, 0);
             drawnActor3D.Transform3D.Scale = worldScale * Vector3.One;
             drawnActor3D.EffectParameters.Alpha = 0.1f;
-            objectManager.Add(drawnActor3D);
+            //objectManager.Add(drawnActor3D);
         }
 
         private void InitSkybox(float worldScale)
@@ -1102,10 +1160,16 @@ namespace GDGame
 
             //  primitiveObject.StatusType = StatusType.Off; //Experiment of the effect of StatusType
             drawnActor3D.ID = "sky back";
-            drawnActor3D.EffectParameters.Texture = textureDictionary["back"]; ;
+            drawnActor3D.EffectParameters.Texture = textureDictionary["spaceback"];
             drawnActor3D.Transform3D.Scale = new Vector3(worldScale, worldScale, 1);
             drawnActor3D.Transform3D.Translation = new Vector3(0, 0, -worldScale / 2.0f);
+
+            drawnActor3D.ControllerList.Add(
+                new RotationController("rot controller1", ControllerType.RotationOverTime,
+               0.04f, new Vector3(0, 0, 1)));
+
             objectManager.Add(drawnActor3D);
+
 
             //left
             drawnActor3D = archetypeDictionary[GameConstants.Primitive_UnlitTexturedQuad].Clone() as PrimitiveObject;
@@ -1115,7 +1179,7 @@ namespace GDGame
             drawnActor3D.Transform3D.Scale = new Vector3(worldScale, worldScale, 1);
             drawnActor3D.Transform3D.RotationInDegrees = new Vector3(0, 90, 0);
             drawnActor3D.Transform3D.Translation = new Vector3(-worldScale / 2.0f, 0, 0);
-            objectManager.Add(drawnActor3D);
+            //objectManager.Add(drawnActor3D);
 
             //right
             drawnActor3D = archetypeDictionary[GameConstants.Primitive_UnlitTexturedQuad].Clone() as PrimitiveObject;
@@ -1125,7 +1189,7 @@ namespace GDGame
             drawnActor3D.Transform3D.Scale = new Vector3(worldScale, worldScale, 20);
             drawnActor3D.Transform3D.RotationInDegrees = new Vector3(0, -90, 0);
             drawnActor3D.Transform3D.Translation = new Vector3(worldScale / 2.0f, 0, 0);
-            objectManager.Add(drawnActor3D);
+            //objectManager.Add(drawnActor3D);
 
             //top
             drawnActor3D = archetypeDictionary[GameConstants.Primitive_UnlitTexturedQuad].Clone() as PrimitiveObject;
@@ -1135,7 +1199,7 @@ namespace GDGame
             drawnActor3D.Transform3D.Scale = new Vector3(worldScale, worldScale, 1);
             drawnActor3D.Transform3D.RotationInDegrees = new Vector3(90, -90, 0);
             drawnActor3D.Transform3D.Translation = new Vector3(0, worldScale / 2.0f, 0);
-            objectManager.Add(drawnActor3D);
+            //objectManager.Add(drawnActor3D);
 
             //front
             drawnActor3D = archetypeDictionary[GameConstants.Primitive_UnlitTexturedQuad].Clone() as PrimitiveObject;
@@ -1145,7 +1209,7 @@ namespace GDGame
             drawnActor3D.Transform3D.Scale = new Vector3(worldScale, worldScale, 1);
             drawnActor3D.Transform3D.RotationInDegrees = new Vector3(0, 180, 0);
             drawnActor3D.Transform3D.Translation = new Vector3(0, 0, worldScale / 2.0f);
-            objectManager.Add(drawnActor3D);
+            //objectManager.Add(drawnActor3D);
         }
 
         #endregion Initialization - Vertices, Archetypes, Helpers, Drawn Content(e.g. Skybox)
