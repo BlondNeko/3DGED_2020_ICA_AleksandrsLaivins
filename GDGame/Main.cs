@@ -196,12 +196,14 @@ namespace GDGame
             textureDictionary.Load("Assets/Textures/UI/Backgrounds/exitmenuwithtrans");
 
             //ui
-            textureDictionary.Load("Assets/Textures/UI/Controls/reticuleDefault");
+            textureDictionary.Load("Assets/Textures/UI/Controls/reticuleSpace");
 
             //add more...
 
             textureDictionary.Load("Assets/Textures/Base/texturespace");
             textureDictionary.Load("Assets/Textures/Base/spaceback");
+
+            textureDictionary.Load("Assets/Textures/Base/spaceempty");
         }
 
         private void LoadFonts()
@@ -306,21 +308,21 @@ namespace GDGame
             SpriteFont spriteFont = null;
 
             #region Mouse Reticule & Text
-            texture = textureDictionary["reticuleDefault"];
+            texture = textureDictionary["reticuleSpace"];
 
             transform2D = new Transform2D(
                 new Vector2(512, 384), //this value doesnt matter since we will recentre in UIMouseObject::Update()
                 0,
                  Vector2.One,
                 new Vector2(texture.Width / 2, texture.Height / 2),
-                new Integer2(45, 46)); //read directly from the PNG file dimensions
+                new Integer2(100, 100)); //read directly from the PNG file dimensions
 
             UIMouseObject uiMouseObject = new UIMouseObject("reticule", ActorType.UIMouse,
                 StatusType.Update | StatusType.Drawn, transform2D, Color.White,
                 SpriteEffects.None, fontDictionary["menu"],
-                "Hello there!",
-                new Vector2(0, -40),
-                Color.Yellow,
+                "",
+                new Vector2(0, -55),
+                Color.LightCyan,
                 0.75f * Vector2.One,
                 0,
                 texture,
@@ -936,6 +938,8 @@ namespace GDGame
                              new Vector3(-50, 0, -150) //offset to move all new objects by
                              );
             //objectManager.Add(actorList);
+
+
         }
 
         #region NEW - 26.12.20
@@ -956,7 +960,7 @@ namespace GDGame
 
             //a unique effectparameters instance for each box in case we want different color, texture, alpha
             effectParameters = new EffectParameters(effectDictionary[GameConstants.Effect_LitTextured],
-                textureDictionary["crate1"], Color.White, 1);
+                textureDictionary["crate1"], Color.White, 0);
 
             //get the vertex data object
             vertexData = new VertexData<VertexPositionNormalTexture>(
@@ -983,7 +987,7 @@ namespace GDGame
                     GameConstants.playerRotateSpeed,
                     keyboardManager);
 
-            //objectManager.Add(collidablePlayerObject);
+            objectManager.Add(collidablePlayerObject);
         }
 
         private void InitCollidableZones()
@@ -1241,6 +1245,21 @@ namespace GDGame
 
         protected override void Update(GameTime gameTime)
         {
+            if (keyboardManager.IsFirstKeyPress(Keys.N))
+            {
+                LevelLoader<PrimitiveObject> levelLoader = new LevelLoader<PrimitiveObject>(
+                archetypeDictionary, textureDictionary);
+                List<DrawnActor3D> actorList = null;
+                actorList = levelLoader.Load(
+                textureDictionary["level1_1"],
+                                10,     //number of in-world x-units represented by 1 pixel in image
+                                10,     //number of in-world z-units represented by 1 pixel in image
+                                20,     //y-axis height offset
+                                new Vector3(-50, 0, -150) //offset to move all new objects by
+                                );
+                objectManager.Add(actorList);
+            }
+
             if (keyboardManager.IsFirstKeyPress(Keys.Escape))
             {
                 Exit();
