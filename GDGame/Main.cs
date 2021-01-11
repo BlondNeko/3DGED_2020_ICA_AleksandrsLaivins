@@ -158,6 +158,7 @@ namespace GDGame
             effect.LightingEnabled = true; //redundant?
             effect.PreferPerPixelLighting = true; //cost GPU cycles
             effect.EnableDefaultLighting();
+            
             //change lighting position, direction and color
 
             effectDictionary.Add(GameConstants.Effect_LitTextured, effect);
@@ -487,12 +488,25 @@ namespace GDGame
 
             //add to the dictionary
             transform3DCurveDictionary.Add("headshake1", curveA);
+
+            curveA = new Transform3DCurve(CurveLoopType.Oscillate); //experiment with other CurveLoopTypes
+            curveA.Add(new Vector3(0, 5, 100), -Vector3.UnitZ, Vector3.UnitY, 0); //start
+            curveA.Add(new Vector3(0, 5, 80), new Vector3(1, 0, -1), Vector3.UnitY, 1000); //start position
+            curveA.Add(new Vector3(0, 5, 50), -Vector3.UnitZ, Vector3.UnitY, 3000); //start position
+            curveA.Add(new Vector3(0, 5, 20), new Vector3(-1, 0, -1), Vector3.UnitY, 4000); //start position
+            curveA.Add(new Vector3(0, 5, 10), -Vector3.UnitZ, Vector3.UnitY, 6000); //start position
+
+            //add to the dictionary
+            transform3DCurveDictionary.Add("enemypath", curveA);
+
         }
 
         private void InitRails()
         {
             //create the track to be applied to the non-collidable track camera 1
             railDictionary.Add("rail1", new RailParameters("rail1 - parallel to z-axis", new Vector3(20, 10, 50), new Vector3(20, 10, -50)));
+
+            railDictionary.Add("enemyrail", new RailParameters("rail1 - parallel to z-axis", new Vector3(20, 10, 50), new Vector3(20, 10, -50)));
         }
 
         private void InitDictionaries()
@@ -562,6 +576,30 @@ namespace GDGame
             Transform3D transform3D = null;
             Camera3D camera3D = null;
             Viewport viewPort = new Viewport(0, 0, resolutionX, resolutionY);
+
+            #region Collidable Camera - Ship Cam
+
+            transform3D = new Transform3D(Vector3.Zero, -Vector3.UnitZ, Vector3.UnitY);
+
+            camera3D = new Camera3D(GameConstants.Camera_CollidableThirdPerson,
+                ActorType.Camera3D, StatusType.Update, transform3D,
+                ProjectionParameters.StandardDeepSixteenTen,
+                viewPort);
+
+            //attach a controller
+            //camera3D.ControllerList.Add(new ThirdPersonController(
+            //    GameConstants.Controllers_CollidableThirdPerson,
+            //    ControllerType.ThirdPerson,
+            //    collidablePlayerObject,
+            //    135,
+            //    40,
+            //    1,
+            //    mouseManager));
+
+
+            cameraManager.Add(camera3D);
+
+            #endregion Collidable Camera - Ship Cam
 
             #region Collidable Camera - 3rd Person
 
@@ -660,6 +698,8 @@ namespace GDGame
             cameraManager.Add(camera3D);
 
             #endregion Noncollidable Camera - Curve3D
+
+
 
             cameraManager.ActiveCameraIndex = 0; //0, 1, 2, 3
         }
@@ -922,9 +962,9 @@ namespace GDGame
                                 10,     //number of in-world x-units represented by 1 pixel in image
                                 10,     //number of in-world z-units represented by 1 pixel in image
                                 20,     //y-axis height offset
-                                new Vector3(-50, 0, -150) //offset to move all new objects by
+                                new Vector3(0, 0, 0) //offset to move all new objects by
                                 );
-            //objectManager.Add(actorList);
+            objectManager.Add(actorList);
 
             //clear the list otherwise when we add level1_2 we would re-add level1_1 objects to object manager
             actorList.Clear();
@@ -1091,7 +1131,7 @@ namespace GDGame
                 collisionPrimitive, objectManager);
 
             //add to the archetype dictionary
-            //objectManager.Add(collidablePrimitiveObject);
+            objectManager.Add(collidablePrimitiveObject);
         }
 
         #endregion NEW - 26.12.20
@@ -1134,7 +1174,7 @@ namespace GDGame
                 new RotationController("rot controller1", ControllerType.RotationOverTime,
                0f, new Vector3(0, 0, 1)));
 
-            objectManager.Add(drawnActor3D);
+            //objectManager.Add(drawnActor3D);
 
         }
 
@@ -1255,8 +1295,21 @@ namespace GDGame
                                 10,     //number of in-world x-units represented by 1 pixel in image
                                 10,     //number of in-world z-units represented by 1 pixel in image
                                 20,     //y-axis height offset
-                                new Vector3(-50, 0, -150) //offset to move all new objects by
+                                new Vector3(0, 0, 0) //offset to move all new objects by
                                 );
+                int count = 1;
+                foreach(DrawnActor3D actor3D in actorList)
+                {
+                    Vector3 current = actor3D.Transform3D.Translation;
+                    Vector3 end = new Vector3(current.X, current.Y + 200, current.Z);
+                    RailParameters rail = new RailParameters("r " + count, current , end);
+                    //Curve3DController curve = new Curve3DController("c" + count, ControllerType.Rail, );
+                    count++;
+                    actor3D.ControllerList.Add(new RailController(GameConstants.Controllers_NonCollidableCurveMainArena, ControllerType.Rail, actor3D, rail));
+                }
+
+
+
                 objectManager.Add(actorList);
             }
 

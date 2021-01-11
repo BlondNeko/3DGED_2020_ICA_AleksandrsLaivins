@@ -1,5 +1,9 @@
-﻿using GDLibrary.Actors;
+﻿using GDGame;
+using GDLibrary.Actors;
 using GDLibrary.Containers;
+using GDLibrary.Controllers;
+using GDLibrary.Enums;
+using GDLibrary.Parameters;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -79,7 +83,7 @@ namespace GDLibrary.Utilities
             if (color.Equals(new Color(255, 0, 0)))
             {
                 PrimitiveObject archetype
-                        = archetypeDictionary["lit textured pyramid"] as PrimitiveObject;
+                        = archetypeDictionary["lit textured diamond"] as PrimitiveObject;
 
                 PrimitiveObject drawnActor3D = archetype.Clone() as PrimitiveObject;
 
@@ -87,20 +91,57 @@ namespace GDLibrary.Utilities
                 //       = archetypeDictionary["lit textured pyramid"].Clone() as PrimitiveObject;
 
                 //change it a bit
-                drawnActor3D.ID = "pyramid " + count++;
-                drawnActor3D.Transform3D.Scale = 10 * new Vector3(3, 4, 1);
-                drawnActor3D.EffectParameters.DiffuseColor = Color.Blue;
-                drawnActor3D.EffectParameters.Alpha = 0.5f;
+                drawnActor3D.ID = "diamond " + count++;
+                drawnActor3D.Transform3D.Scale = 10 * new Vector3(2, 2, 2);
+                drawnActor3D.EffectParameters.DiffuseColor = Color.Red;
+                drawnActor3D.EffectParameters.Alpha = 1f;
+                drawnActor3D.Transform3D.Translation = translation;
+                drawnActor3D.Transform3D.RotationInDegrees = new Vector3(0, 0, 0);
+                return drawnActor3D;
+            }
+            else if (color.Equals(new Color(0, 255, 0)))
+            {
+                PrimitiveObject archetype
+                        = archetypeDictionary["lit textured diamond"] as PrimitiveObject;
+
+                PrimitiveObject drawnActor3D = archetype.Clone() as PrimitiveObject;
+
+                //   PrimitiveObject drawnActor3D
+                //       = archetypeDictionary["lit textured pyramid"].Clone() as PrimitiveObject;
+
+                //change it a bit
+                drawnActor3D.ID = "diamond " + count++;
+                drawnActor3D.Transform3D.Scale = 10 * new Vector3(2, 2, 2);
+                drawnActor3D.EffectParameters.DiffuseColor = Color.Green;
+                drawnActor3D.EffectParameters.Alpha = 1f;
                 drawnActor3D.Transform3D.Translation = translation;
                 drawnActor3D.Transform3D.RotationInDegrees = new Vector3(0, 0, 0);
                 return drawnActor3D;
             }
             else if (color.Equals(new Color(0, 0, 255)))
             {
-                //enemy instance
-                return null;
+                PrimitiveObject archetype
+                        = archetypeDictionary["lit textured diamond"] as PrimitiveObject;
+
+                PrimitiveObject drawnActor3D = archetype.Clone() as PrimitiveObject;
+
+                //   PrimitiveObject drawnActor3D
+                //       = archetypeDictionary["lit textured pyramid"].Clone() as PrimitiveObject;
+
+                //change it a bit
+                drawnActor3D.ID = "diamond " + count++;
+                drawnActor3D.Transform3D.Scale = 20 * new Vector3(2, 2, 2);
+                drawnActor3D.EffectParameters.DiffuseColor = Color.Blue;
+                drawnActor3D.EffectParameters.Alpha = 1f;
+                drawnActor3D.Transform3D.Translation = translation;
+                drawnActor3D.Transform3D.RotationInDegrees = new Vector3(0, 0, 0);
+                drawnActor3D.StatusType = StatusType.Drawn | StatusType.Update;
+                drawnActor3D.ControllerList.Add(
+                new RotationController("rot controller1", ControllerType.RotationOverTime,
+               0.7f, new Vector3(0, 1, 0)));
+
+                return drawnActor3D;
             }
-            //add an else if for each type of object that you want to load...
 
             return null;
         }
