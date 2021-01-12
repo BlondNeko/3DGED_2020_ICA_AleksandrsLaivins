@@ -952,8 +952,7 @@ namespace GDGame
 
             /************ Level-loader (can be collidable or non-collidable) ************/
 
-            LevelLoader<PrimitiveObject> levelLoader = new LevelLoader<PrimitiveObject>(
-                archetypeDictionary, textureDictionary);
+            LevelLoader<PrimitiveObject> levelLoader = new LevelLoader<PrimitiveObject>(archetypeDictionary, textureDictionary);
             List<DrawnActor3D> actorList = null;
 
             //add level1_1 contents
@@ -964,7 +963,7 @@ namespace GDGame
                                 20,     //y-axis height offset
                                 new Vector3(0, 0, 0) //offset to move all new objects by
                                 );
-            objectManager.Add(actorList);
+            //objectManager.Add(actorList);
 
             //clear the list otherwise when we add level1_2 we would re-add level1_1 objects to object manager
             actorList.Clear();
@@ -978,7 +977,7 @@ namespace GDGame
                              new Vector3(-50, 0, -150) //offset to move all new objects by
                              );
             //objectManager.Add(actorList);
-
+            actorList.Clear();
 
         }
 
@@ -1091,6 +1090,30 @@ namespace GDGame
 
             //add to the archetype dictionary
             //objectManager.Add(collidablePrimitiveObject);
+
+            effectParameters = new EffectParameters(effectDictionary[GameConstants.Effect_LitTextured],
+                textureDictionary["spaceback"], Color.White, 1);
+
+            //get the vertex data object
+            vertexData = new VertexData<VertexPositionNormalTexture>(
+                VertexFactory.GetVerticesPositionNormalTexturedCube(1,
+                                  out primitiveType, out primitiveCount),
+                                  primitiveType, primitiveCount);
+
+            //make the collision primitive - changed slightly to no longer need transform
+            collisionPrimitive = new BoxCollisionPrimitive(transform3D);
+
+            //make a collidable object and pass in the primitive
+            collidablePrimitiveObject = new CollidablePrimitiveObject(
+                GameConstants.Primitive_LitTexturedCube,
+                ActorType.CollidableDecorator,  //this is important as it will determine how we filter collisions in our collidable player CDCR code
+                StatusType.Drawn | StatusType.Update,
+                transform3D,
+                effectParameters,
+                vertexData,
+                collisionPrimitive, objectManager);
+
+            objectManager.Add(collidablePrimitiveObject);
         }
 
         private void InitCollidablePickups()
@@ -1102,14 +1125,13 @@ namespace GDGame
             CollidablePrimitiveObject collidablePrimitiveObject = null;
             PrimitiveType primitiveType;
             int primitiveCount;
-
             /************************* Sphere Collision Primitive  *************************/
 
             transform3D = new Transform3D(new Vector3(-20, 4, 0), Vector3.Zero, new Vector3(4, 12, 4), Vector3.UnitZ, Vector3.UnitY);
 
             //a unique effectparameters instance for each box in case we want different color, texture, alpha
             effectParameters = new EffectParameters(effectDictionary[GameConstants.Effect_LitTextured],
-                textureDictionary["crate1"], Color.White, 1);
+                textureDictionary["spaceback"], Color.White, 1);
 
             //get the vertex data object
             vertexData = new VertexData<VertexPositionNormalTexture>(
@@ -1118,7 +1140,7 @@ namespace GDGame
                                   primitiveType, primitiveCount);
 
             //make the collision primitive - changed slightly to no longer need transform
-            collisionPrimitive = new SphereCollisionPrimitive(transform3D, 10);
+            collisionPrimitive = new SphereCollisionPrimitive(transform3D, 20);
 
             //make a collidable object and pass in the primitive
             collidablePrimitiveObject = new CollidablePrimitiveObject(
@@ -1131,7 +1153,47 @@ namespace GDGame
                 collisionPrimitive, objectManager);
 
             //add to the archetype dictionary
+            //objectManager.Add(collidablePrimitiveObject);
+
+            //objectManager.Add(collidablePrimitiveObject);
+
+            transform3D = new Transform3D(new Vector3(-20, 4, 0), Vector3.Zero, new Vector3(4, 12, 4), Vector3.UnitZ, Vector3.UnitY);
+
+            vertexData = new VertexData<VertexPositionNormalTexture>(
+                VertexFactory.GetVerticesPositionNormalTexturedDiamond(out primitiveType, out primitiveCount), primitiveType, primitiveCount);
+
+            collisionPrimitive = new SphereCollisionPrimitive(transform3D, 10);
+
+            collidablePrimitiveObject = new CollidablePrimitiveObject(
+                GameConstants.Primitive_LitTexturedDiamond,
+                ActorType.CollidableDecorator,
+                StatusType.Drawn | StatusType.Update,
+                transform3D,
+                effectParameters,
+                vertexData,
+                collisionPrimitive, objectManager
+                );
+
+            collidablePrimitiveObject.ControllerList.Add(
+                new RotationController("rot controller1", ControllerType.RotationOverTime,
+               0.5f, new Vector3(0, 1, 0)));
+
+
+            Transform3DCurve curveA = new Transform3DCurve(CurveLoopType.Oscillate); //experiment with other CurveLoopTypes
+            curveA.Add(transform3D.Translation, -Vector3.UnitZ, Vector3.UnitY, 0); //start
+            curveA.Add(new Vector3(0, 5, 80), new Vector3(1, 0, -1), Vector3.UnitY, 1000); //start position
+            curveA.Add(new Vector3(0, 5, 50), -Vector3.UnitZ, Vector3.UnitY, 3000); //start position
+            curveA.Add(new Vector3(0, 5, 20), new Vector3(-1, 0, -1), Vector3.UnitY, 4000); //start position
+            curveA.Add(new Vector3(0, 5, 10), -Vector3.UnitZ, Vector3.UnitY, 6000); //start position
+
+
+
+            collidablePrimitiveObject.ControllerList.Add(new Curve3DController("enemyPath", ControllerType.Curve, curveA));
+
+
+
             objectManager.Add(collidablePrimitiveObject);
+
         }
 
         #endregion NEW - 26.12.20
@@ -1157,7 +1219,7 @@ namespace GDGame
                 new RotationController("rot controller1", ControllerType.RotationOverTime,
                1, new Vector3(0, -1, 0)));
 
-            objectManager.Add(drawnActor3D);
+            //objectManager.Add(drawnActor3D);
 
             drawnActor3D
                 = archetypeDictionary[GameConstants.Primitive_LitTexturedDiamond].Clone() as PrimitiveObject;
@@ -1215,7 +1277,7 @@ namespace GDGame
                 new RotationController("rot controller1", ControllerType.RotationOverTime,
                0.04f, new Vector3(0, 0, 1)));
 
-            objectManager.Add(drawnActor3D);
+            //objectManager.Add(drawnActor3D);
 
 
             //left
@@ -1295,20 +1357,42 @@ namespace GDGame
                                 10,     //number of in-world x-units represented by 1 pixel in image
                                 10,     //number of in-world z-units represented by 1 pixel in image
                                 20,     //y-axis height offset
-                                new Vector3(0, 0, 0) //offset to move all new objects by
+                                new Vector3(0, -200, -1500) //offset to move all new objects by
                                 );
                 int count = 1;
-                foreach(DrawnActor3D actor3D in actorList)
+
+                //Transform3DCurve curveA = new Transform3DCurve(CurveLoopType.Oscillate); //experiment with other CurveLoopTypes
+
+                foreach (DrawnActor3D actor3D in actorList)
                 {
-                    Vector3 current = actor3D.Transform3D.Translation;
-                    Vector3 end = new Vector3(current.X, current.Y + 200, current.Z);
-                    RailParameters rail = new RailParameters("r " + count, current , end);
-                    //Curve3DController curve = new Curve3DController("c" + count, ControllerType.Rail, );
-                    count++;
-                    actor3D.ControllerList.Add(new RailController(GameConstants.Controllers_NonCollidableCurveMainArena, ControllerType.Rail, actor3D, rail));
+                    if (actor3D.ID.StartsWith('r'))
+                    {
+                        //Vector3 current = actor3D.Transform3D.Translation;
+
+                        //curveA.Add(new Vector3(0, 0, 0), -Vector3.UnitZ, Vector3.UnitY, 0); //start
+                        //curveA.Add(new Vector3(0, 10, 200), new Vector3(1, 0, -1), Vector3.UnitY, 10000); //start position
+                        //curveA.Add(new Vector3(0, 20, 400), -Vector3.UnitZ, Vector3.UnitY, 30000); //start position
+                        //curveA.Add(new Vector3(0, 50, 600), new Vector3(-1, 0, -1), Vector3.UnitY, 40000); //start position
+                        //curveA.Add(new Vector3(0, 1000, 800), -Vector3.UnitZ, Vector3.UnitY, 60000); //start position
+
+                        //RailParameters rail = new RailParameters("rail " + count, current + new Vector3(0, 200, 0), current + new Vector3(0, 200, 0));
+                        //Curve3DController curve = new Curve3DController("c" + count, ControllerType.Rail, );
+
+                        //actor3D.ControllerList.Add(new Curve3DController(GameConstants.Controllers_NonCollidableCurveMainArena, ControllerType.Curve, curveA));
+
+                        actor3D.ControllerList.Add(
+                                new Curve3DController(GameConstants.Controllers_NonCollidableCurveMainArena,
+                                ControllerType.Curve,
+                                transform3DCurveDictionary["headshake1"]));
+
+                        //curveA.Clear();
+
+                        count++;
+
+                        actor3D.EffectParameters.DiffuseColor = Color.Green;
+                    }
+                    
                 }
-
-
 
                 objectManager.Add(actorList);
             }

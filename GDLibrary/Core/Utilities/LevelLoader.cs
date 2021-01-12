@@ -91,7 +91,7 @@ namespace GDLibrary.Utilities
                 //       = archetypeDictionary["lit textured pyramid"].Clone() as PrimitiveObject;
 
                 //change it a bit
-                drawnActor3D.ID = "diamond " + count++;
+                drawnActor3D.ID = "r diamond " + count++;
                 drawnActor3D.Transform3D.Scale = 10 * new Vector3(2, 2, 2);
                 drawnActor3D.EffectParameters.DiffuseColor = Color.Red;
                 drawnActor3D.EffectParameters.Alpha = 1f;
