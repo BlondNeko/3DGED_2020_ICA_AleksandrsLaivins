@@ -577,30 +577,6 @@ namespace GDGame
             Camera3D camera3D = null;
             Viewport viewPort = new Viewport(0, 0, resolutionX, resolutionY);
 
-            #region Collidable Camera - Ship Cam
-
-            transform3D = new Transform3D(Vector3.Zero, -Vector3.UnitZ, Vector3.UnitY);
-
-            camera3D = new Camera3D(GameConstants.Camera_CollidableThirdPerson,
-                ActorType.Camera3D, StatusType.Update, transform3D,
-                ProjectionParameters.StandardDeepSixteenTen,
-                viewPort);
-
-            //attach a controller
-            //camera3D.ControllerList.Add(new ThirdPersonController(
-            //    GameConstants.Controllers_CollidableThirdPerson,
-            //    ControllerType.ThirdPerson,
-            //    collidablePlayerObject,
-            //    135,
-            //    40,
-            //    1,
-            //    mouseManager));
-
-
-            cameraManager.Add(camera3D);
-
-            #endregion Collidable Camera - Ship Cam
-
             #region Collidable Camera - 3rd Person
 
             transform3D = new Transform3D(Vector3.Zero, -Vector3.UnitZ, Vector3.UnitY);
@@ -615,13 +591,41 @@ namespace GDGame
                 GameConstants.Controllers_CollidableThirdPerson,
                 ControllerType.ThirdPerson,
                 collidablePlayerObject,
-                135,
-                40,
+                165,
+                150,
                 1,
                 mouseManager));
+
             cameraManager.Add(camera3D);
 
             #endregion Collidable Camera - 3rd Person
+
+            #region Fixed
+
+            Vector3 translation = new Vector3(0,0,-100);
+
+            Vector3 rotationInDegrees = new Vector3(0, 0, 0);
+
+            transform3D = new Transform3D(translation, rotationInDegrees, Vector3.One, -Vector3.UnitZ, Vector3.UnitY);
+
+            camera3D = new Camera3D(GameConstants.Camera_CollidableThirdPerson,
+                ActorType.Camera3D, StatusType.Update, transform3D,
+                ProjectionParameters.StandardDeepSixteenTen,
+                viewPort);
+
+            //attach a controller
+            //camera3D.ControllerList.Add(new ThirdPersonController(
+            //    GameConstants.Controllers_CollidableThirdPerson,
+            //    ControllerType.ThirdPerson,
+            //    collidablePlayerObject,
+            //    165,
+            //    150,
+            //    1,
+            //    mouseManager));
+
+            cameraManager.Add(camera3D);
+
+            #endregion Fixed
 
             #region Noncollidable Camera - First Person
 
@@ -698,6 +702,52 @@ namespace GDGame
             cameraManager.Add(camera3D);
 
             #endregion Noncollidable Camera - Curve3D
+
+            #region Collidable Camera - 3rd Person backup
+
+            transform3D = new Transform3D(Vector3.Zero, -Vector3.UnitZ, Vector3.UnitY);
+
+            camera3D = new Camera3D(GameConstants.Camera_CollidableThirdPerson,
+                ActorType.Camera3D, StatusType.Update, transform3D,
+                ProjectionParameters.StandardDeepSixteenTen,
+                viewPort);
+
+            //attach a controller
+            camera3D.ControllerList.Add(new ThirdPersonController(
+                GameConstants.Controllers_CollidableThirdPerson,
+                ControllerType.ThirdPerson,
+                collidablePlayerObject,
+                135,
+                40,
+                1,
+                mouseManager));
+            cameraManager.Add(camera3D);
+
+            #endregion Collidable Camera - 3rd Person backup
+
+            #region Collidable Camera - Ship Cam
+
+            transform3D = new Transform3D(Vector3.Zero, -Vector3.UnitZ, Vector3.UnitY);
+
+            camera3D = new Camera3D(GameConstants.Camera_CollidableThirdPerson,
+                ActorType.Camera3D, StatusType.Update, transform3D,
+                ProjectionParameters.StandardDeepSixteenTen,
+                viewPort);
+
+            //attach a controller
+            //camera3D.ControllerList.Add(new ThirdPersonController(
+            //    GameConstants.Controllers_CollidableThirdPerson,
+            //    ControllerType.ThirdPerson,
+            //    collidablePlayerObject,
+            //    135,
+            //    40,
+            //    1,
+            //    mouseManager));
+
+
+            cameraManager.Add(camera3D);
+
+            #endregion Collidable Camera - Ship Cam
 
 
 
@@ -994,21 +1044,20 @@ namespace GDGame
             int primitiveCount;
 
             //set the position
-            transform3D = new Transform3D(new Vector3(0, 4, 40), Vector3.Zero, new Vector3(3, 6, 3),
+            transform3D = new Transform3D(new Vector3(0, 0, 0), Vector3.Zero, new Vector3(10, 5, 20),
                 -Vector3.UnitZ, Vector3.UnitY);
 
             //a unique effectparameters instance for each box in case we want different color, texture, alpha
             effectParameters = new EffectParameters(effectDictionary[GameConstants.Effect_LitTextured],
-                textureDictionary["crate1"], Color.White, 0);
+                textureDictionary["spaceback"], Color.White, 1);
 
             //get the vertex data object
-            vertexData = new VertexData<VertexPositionNormalTexture>(
-                VertexFactory.GetVerticesPositionNormalTexturedCube(1,
-                                  out primitiveType, out primitiveCount),
-                                  primitiveType, primitiveCount);
+            //vertexData = new VertexData<VertexPositionNormalTexture>(VertexFactory.GetVerticesPositionNormalTexturedCube(1, out primitiveType, out primitiveCount), primitiveType, primitiveCount);
+
+            vertexData = new VertexData<VertexPositionNormalTexture>(VertexFactory.GetVerticesPositionNormalTexturedDiamond(out primitiveType, out primitiveCount), primitiveType, primitiveCount);
 
             //make a CDCR surface - sphere or box, its up to you - you dont need to pass transform to either primitive anymore
-            collisionPrimitive = new SphereCollisionPrimitive(transform3D, 1);
+            collisionPrimitive = new SphereCollisionPrimitive(transform3D, 2);
 
             //if we make this a field then we can pass to the 3rd person camera controller
             collidablePlayerObject
@@ -1021,7 +1070,7 @@ namespace GDGame
                     vertexData,
                     collisionPrimitive,
                     objectManager,
-                    GameConstants.KeysTwo,
+                    GameConstants.KeysOne,
                     GameConstants.playerMoveSpeed,
                     GameConstants.playerRotateSpeed,
                     keyboardManager);
@@ -1035,8 +1084,7 @@ namespace GDGame
             ICollisionPrimitive collisionPrimitive = null;
             CollidableZoneObject collidableZoneObject = null;
 
-            transform3D = new Transform3D(new Vector3(0, 4, -30),
-                Vector3.Zero, new Vector3(20, 8, 4), Vector3.UnitZ, Vector3.UnitY);
+            transform3D = new Transform3D(new Vector3(100, 0, 0), Vector3.Zero, new Vector3(1, 100, 100), Vector3.UnitZ, Vector3.UnitY);
 
             //make the collision primitive - changed slightly to no longer need transform
             collisionPrimitive = new BoxCollisionPrimitive(transform3D);
@@ -1046,7 +1094,7 @@ namespace GDGame
                 transform3D,
                 collisionPrimitive);
 
-            //objectManager.Add(collidableZoneObject);
+            objectManager.Add(collidableZoneObject);
         }
 
         private void InitCollidableProps()
@@ -1277,7 +1325,7 @@ namespace GDGame
                 new RotationController("rot controller1", ControllerType.RotationOverTime,
                0.04f, new Vector3(0, 0, 1)));
 
-            //objectManager.Add(drawnActor3D);
+            objectManager.Add(drawnActor3D);
 
 
             //left
