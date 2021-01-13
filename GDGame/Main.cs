@@ -200,6 +200,7 @@ namespace GDGame
             textureDictionary.Load("Assets/Textures/UI/Controls/reticuleSpace");
 
             //add more...
+            textureDictionary.Load("Assets/Textures/Base/ship");
 
             textureDictionary.Load("Assets/Textures/Base/texturespace");
             textureDictionary.Load("Assets/Textures/Base/spaceback");
@@ -577,6 +578,23 @@ namespace GDGame
             Camera3D camera3D = null;
             Viewport viewPort = new Viewport(0, 0, resolutionX, resolutionY);
 
+            #region Fixed
+
+            Vector3 translation = new Vector3(0, 150, 200);
+
+            Vector3 rotationInDegrees = new Vector3(0, 0, 0);
+
+            transform3D = new Transform3D(translation, rotationInDegrees, Vector3.One, new Vector3(0, -0.20f, -1), Vector3.UnitY);
+
+            camera3D = new Camera3D(" Fixed Camera - Main ",
+                ActorType.Camera3D, StatusType.Update, transform3D,
+                ProjectionParameters.StandardDeepSixteenTen,
+                viewPort);
+
+            cameraManager.Add(camera3D);
+
+            #endregion Fixed
+
             #region Collidable Camera - 3rd Person
 
             transform3D = new Transform3D(Vector3.Zero, -Vector3.UnitZ, Vector3.UnitY);
@@ -599,33 +617,6 @@ namespace GDGame
             cameraManager.Add(camera3D);
 
             #endregion Collidable Camera - 3rd Person
-
-            #region Fixed
-
-            Vector3 translation = new Vector3(0,0,-100);
-
-            Vector3 rotationInDegrees = new Vector3(0, 0, 0);
-
-            transform3D = new Transform3D(translation, rotationInDegrees, Vector3.One, -Vector3.UnitZ, Vector3.UnitY);
-
-            camera3D = new Camera3D(GameConstants.Camera_CollidableThirdPerson,
-                ActorType.Camera3D, StatusType.Update, transform3D,
-                ProjectionParameters.StandardDeepSixteenTen,
-                viewPort);
-
-            //attach a controller
-            //camera3D.ControllerList.Add(new ThirdPersonController(
-            //    GameConstants.Controllers_CollidableThirdPerson,
-            //    ControllerType.ThirdPerson,
-            //    collidablePlayerObject,
-            //    165,
-            //    150,
-            //    1,
-            //    mouseManager));
-
-            cameraManager.Add(camera3D);
-
-            #endregion Fixed
 
             #region Noncollidable Camera - First Person
 
@@ -1044,12 +1035,12 @@ namespace GDGame
             int primitiveCount;
 
             //set the position
-            transform3D = new Transform3D(new Vector3(0, 0, 0), Vector3.Zero, new Vector3(10, 5, 20),
+            transform3D = new Transform3D(new Vector3(0, 0, -75), Vector3.Zero, new Vector3(40, 20, 40),
                 -Vector3.UnitZ, Vector3.UnitY);
 
             //a unique effectparameters instance for each box in case we want different color, texture, alpha
             effectParameters = new EffectParameters(effectDictionary[GameConstants.Effect_LitTextured],
-                textureDictionary["spaceback"], Color.White, 1);
+                textureDictionary["ship"], Color.White, 1);
 
             //get the vertex data object
             //vertexData = new VertexData<VertexPositionNormalTexture>(VertexFactory.GetVerticesPositionNormalTexturedCube(1, out primitiveType, out primitiveCount), primitiveType, primitiveCount);
@@ -1057,7 +1048,7 @@ namespace GDGame
             vertexData = new VertexData<VertexPositionNormalTexture>(VertexFactory.GetVerticesPositionNormalTexturedDiamond(out primitiveType, out primitiveCount), primitiveType, primitiveCount);
 
             //make a CDCR surface - sphere or box, its up to you - you dont need to pass transform to either primitive anymore
-            collisionPrimitive = new SphereCollisionPrimitive(transform3D, 2);
+            collisionPrimitive = new SphereCollisionPrimitive(transform3D, 5);
 
             //if we make this a field then we can pass to the 3rd person camera controller
             collidablePlayerObject
@@ -1070,7 +1061,7 @@ namespace GDGame
                     vertexData,
                     collisionPrimitive,
                     objectManager,
-                    GameConstants.KeysOne,
+                    GameConstants.KeysTwo,
                     GameConstants.playerMoveSpeed,
                     GameConstants.playerRotateSpeed,
                     keyboardManager);
@@ -1080,21 +1071,59 @@ namespace GDGame
 
         private void InitCollidableZones()
         {
+            EffectParameters effectParameters = null;
+            IVertexData vertexData = null;
+            CollidablePrimitiveObject collidablePrimitiveObject = null;
+            PrimitiveType primitiveType;
+            int primitiveCount;
+
             Transform3D transform3D = null;
             ICollisionPrimitive collisionPrimitive = null;
             CollidableZoneObject collidableZoneObject = null;
 
-            transform3D = new Transform3D(new Vector3(100, 0, 0), Vector3.Zero, new Vector3(1, 100, 100), Vector3.UnitZ, Vector3.UnitY);
+            transform3D = new Transform3D(new Vector3(0, -10, 0), Vector3.Zero, new Vector3(1000, 1, 1000), Vector3.UnitZ, Vector3.UnitY);
 
             //make the collision primitive - changed slightly to no longer need transform
             collisionPrimitive = new BoxCollisionPrimitive(transform3D);
 
-            collidableZoneObject = new CollidableZoneObject("sound and camera trigger zone 1", ActorType.CollidableZone,
+            collidableZoneObject = new CollidableZoneObject("game end", ActorType.CollidableDecorator,
                 StatusType.Drawn | StatusType.Update,
                 transform3D,
                 collisionPrimitive);
 
             objectManager.Add(collidableZoneObject);
+
+            transform3D = new Transform3D(new Vector3(-1000, 0, 0), new Vector3(0, 0, 0), new Vector3(1, 1000, 1000), Vector3.UnitZ, Vector3.UnitY);
+
+            effectParameters = new EffectParameters(effectDictionary[GameConstants.Effect_LitTextured],
+                textureDictionary["ship"], Color.Black, 1);
+
+            //get the vertex data object
+            vertexData = new VertexData<VertexPositionNormalTexture>(VertexFactory.GetVerticesPositionNormalTexturedCube(1,out primitiveType, out primitiveCount),primitiveType, primitiveCount);
+
+            //vertexData = new VertexData<VertexPositionNormalTexture>(VertexFactory.GetVerticesPositionColorTextureQuad(1, out primitiveType, out primitiveCount));
+
+
+
+            //make the collision primitive - changed slightly to no longer need transform
+            collisionPrimitive = new BoxCollisionPrimitive(transform3D);
+
+            //make a collidable object and pass in the primitive
+            collidablePrimitiveObject = new CollidablePrimitiveObject(
+                GameConstants.Primitive_LitTexturedCube,
+                ActorType.CollidableDecorator,  //this is important as it will determine how we filter collisions in our collidable player CDCR code
+                StatusType.Drawn | StatusType.Update,
+                transform3D,
+                effectParameters,
+                vertexData,
+                collisionPrimitive, objectManager);
+
+            collidablePrimitiveObject.Transform3D.RotateBy(new Vector3(0,0,0));
+
+            //objectManager.Add(collidablePrimitiveObject);
+            //objectManager.Add(drawnActor3D);
+
+
         }
 
         private void InitCollidableProps()
@@ -1109,7 +1138,7 @@ namespace GDGame
 
             /************************* Box Collision Primitive  *************************/
 
-            transform3D = new Transform3D(new Vector3(20, 4, 0), Vector3.Zero, new Vector3(6, 8, 6), Vector3.UnitZ, Vector3.UnitY);
+            transform3D = new Transform3D(new Vector3(10, 0, 0), Vector3.Zero, new Vector3(6, 8, 6), Vector3.UnitZ, Vector3.UnitY);
 
             //a unique effectparameters instance for each box in case we want different color, texture, alpha
             effectParameters = new EffectParameters(effectDictionary[GameConstants.Effect_LitTextured],
@@ -1135,12 +1164,13 @@ namespace GDGame
                 collisionPrimitive, objectManager);
 
 
+            transform3D = new Transform3D(new Vector3(280, 0, 0), Vector3.Zero, new Vector3(1 ,1000, 1000), Vector3.UnitZ, Vector3.UnitY);
 
             //add to the archetype dictionary
             //objectManager.Add(collidablePrimitiveObject);
 
             effectParameters = new EffectParameters(effectDictionary[GameConstants.Effect_LitTextured],
-                textureDictionary["spaceback"], Color.White, 1);
+                textureDictionary["ship"], Color.White, 1);
 
             //get the vertex data object
             vertexData = new VertexData<VertexPositionNormalTexture>(
@@ -1162,6 +1192,36 @@ namespace GDGame
                 collisionPrimitive, objectManager);
 
             objectManager.Add(collidablePrimitiveObject);
+
+            transform3D = new Transform3D(new Vector3(-280, 0, 0), Vector3.Zero, new Vector3(1, 1000, 1000), Vector3.UnitZ, Vector3.UnitY);
+
+            //add to the archetype dictionary
+            //objectManager.Add(collidablePrimitiveObject);
+
+            effectParameters = new EffectParameters(effectDictionary[GameConstants.Effect_LitTextured],
+                textureDictionary["ship"], Color.White, 1);
+
+            //get the vertex data object
+            vertexData = new VertexData<VertexPositionNormalTexture>(
+                VertexFactory.GetVerticesPositionNormalTexturedCube(1,
+                                  out primitiveType, out primitiveCount),
+                                  primitiveType, primitiveCount);
+
+            //make the collision primitive - changed slightly to no longer need transform
+            collisionPrimitive = new BoxCollisionPrimitive(transform3D);
+
+            //make a collidable object and pass in the primitive
+            collidablePrimitiveObject = new CollidablePrimitiveObject(
+                GameConstants.Primitive_LitTexturedCube,
+                ActorType.CollidableDecorator,  //this is important as it will determine how we filter collisions in our collidable player CDCR code
+                StatusType.Drawn | StatusType.Update,
+                transform3D,
+                effectParameters,
+                vertexData,
+                collisionPrimitive, objectManager);
+
+            objectManager.Add(collidablePrimitiveObject);
+
         }
 
         private void InitCollidablePickups()
@@ -1267,7 +1327,7 @@ namespace GDGame
                 new RotationController("rot controller1", ControllerType.RotationOverTime,
                1, new Vector3(0, -1, 0)));
 
-            //objectManager.Add(drawnActor3D);
+            objectManager.Add(drawnActor3D);
 
             drawnActor3D
                 = archetypeDictionary[GameConstants.Primitive_LitTexturedDiamond].Clone() as PrimitiveObject;
@@ -1317,13 +1377,15 @@ namespace GDGame
 
             //  primitiveObject.StatusType = StatusType.Off; //Experiment of the effect of StatusType
             drawnActor3D.ID = "sky back";
-            drawnActor3D.EffectParameters.Texture = textureDictionary["spaceback"];
+            drawnActor3D.EffectParameters.Texture = textureDictionary["spaceempty"];
             drawnActor3D.Transform3D.Scale = new Vector3(worldScale, worldScale, 1);
             drawnActor3D.Transform3D.Translation = new Vector3(0, 0, -worldScale / 2.0f);
 
             drawnActor3D.ControllerList.Add(
                 new RotationController("rot controller1", ControllerType.RotationOverTime,
                0.04f, new Vector3(0, 0, 1)));
+
+            
 
             objectManager.Add(drawnActor3D);
 
@@ -1332,21 +1394,21 @@ namespace GDGame
             drawnActor3D = archetypeDictionary[GameConstants.Primitive_UnlitTexturedQuad].Clone() as PrimitiveObject;
             drawnActor3D.ActorType = ActorType.Sky;
             drawnActor3D.ID = "left back";
-            drawnActor3D.EffectParameters.Texture = textureDictionary["left"]; ;
+            drawnActor3D.EffectParameters.Texture = textureDictionary["spaceempty"]; ;
             drawnActor3D.Transform3D.Scale = new Vector3(worldScale, worldScale, 1);
-            drawnActor3D.Transform3D.RotationInDegrees = new Vector3(0, 90, 0);
+            drawnActor3D.Transform3D.RotationInDegrees = new Vector3(0, 45, 0);
             drawnActor3D.Transform3D.Translation = new Vector3(-worldScale / 2.0f, 0, 0);
-            //objectManager.Add(drawnActor3D);
+            objectManager.Add(drawnActor3D);
 
             //right
             drawnActor3D = archetypeDictionary[GameConstants.Primitive_UnlitTexturedQuad].Clone() as PrimitiveObject;
             drawnActor3D.ActorType = ActorType.Sky;
             drawnActor3D.ID = "sky right";
-            drawnActor3D.EffectParameters.Texture = textureDictionary["right"];
+            drawnActor3D.EffectParameters.Texture = textureDictionary["spaceempty"];
             drawnActor3D.Transform3D.Scale = new Vector3(worldScale, worldScale, 20);
-            drawnActor3D.Transform3D.RotationInDegrees = new Vector3(0, -90, 0);
+            drawnActor3D.Transform3D.RotationInDegrees = new Vector3(0, -45, 0);
             drawnActor3D.Transform3D.Translation = new Vector3(worldScale / 2.0f, 0, 0);
-            //objectManager.Add(drawnActor3D);
+            objectManager.Add(drawnActor3D);
 
             //top
             drawnActor3D = archetypeDictionary[GameConstants.Primitive_UnlitTexturedQuad].Clone() as PrimitiveObject;
