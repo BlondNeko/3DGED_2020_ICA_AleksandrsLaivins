@@ -1164,7 +1164,7 @@ namespace GDGame
                 collisionPrimitive, objectManager);
 
 
-            transform3D = new Transform3D(new Vector3(280, 0, 0), Vector3.Zero, new Vector3(1 ,1000, 1000), Vector3.UnitZ, Vector3.UnitY);
+            transform3D = new Transform3D(new Vector3(180, 0, 0), Vector3.Zero, new Vector3(1 ,1000, 1000), Vector3.UnitZ, Vector3.UnitY);
 
             //add to the archetype dictionary
             //objectManager.Add(collidablePrimitiveObject);
@@ -1193,7 +1193,7 @@ namespace GDGame
 
             objectManager.Add(collidablePrimitiveObject);
 
-            transform3D = new Transform3D(new Vector3(-280, 0, 0), Vector3.Zero, new Vector3(1, 1000, 1000), Vector3.UnitZ, Vector3.UnitY);
+            transform3D = new Transform3D(new Vector3(-180, 0, 0), Vector3.Zero, new Vector3(1, 1000, 1000), Vector3.UnitZ, Vector3.UnitY);
 
             //add to the archetype dictionary
             //objectManager.Add(collidablePrimitiveObject);
