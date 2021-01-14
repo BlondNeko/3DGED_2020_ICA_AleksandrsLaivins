@@ -10,6 +10,7 @@ namespace GDGame
         public static readonly Keys[] KeysOne = { Keys.W, Keys.S, Keys.A, Keys.D };
         public static readonly Keys[] KeysTwo = { Keys.U, Keys.J, Keys.H, Keys.K };
         public static readonly Keys[] KeysThree = { Keys.I, Keys.J, Keys.K, Keys.L };
+        public static readonly Keys[] KeysArrows = { Keys.Up, Keys.Down, Keys.Left, Keys.Right };
         //   public static readonly Keys[] KeysThree = { Keys.U, Keys.J, Keys.H, Keys.K };
         #endregion Common
 
@@ -94,7 +95,7 @@ namespace GDGame
 
         #region Player
 
-        public static readonly float playerMoveSpeed = 0.15f;
+        public static readonly float playerMoveSpeed = 0.25f;
         public static readonly float playerStrafeSpeed = strafeSpeedMultiplier * moveSpeed;
         public static readonly float playerRotateSpeed = 0.10f;
 

@@ -198,6 +198,7 @@ namespace GDGame
 
             //ui
             textureDictionary.Load("Assets/Textures/UI/Controls/reticuleSpace");
+            textureDictionary.Load("Assets/Textures/UI/uiMain");
 
             //add more...
             textureDictionary.Load("Assets/Textures/Base/ship");
@@ -334,6 +335,7 @@ namespace GDGame
             uiManager.Add(uiMouseObject);
             #endregion Mouse Reticule & Text
 
+
             #region Progress Control Left
             texture = textureDictionary["progress_white"];
 
@@ -365,7 +367,7 @@ namespace GDGame
             spriteFont = Content.Load<SpriteFont>("Assets/Fonts/debug");
 
             //calculate how big the text is in (w,h)
-            string text = "Hello World!!!";
+            string text = " qq ";
             Vector2 originalDimensions = spriteFont.MeasureString(text);
 
             transform2D = new Transform2D(new Vector2(512, 768 - (originalDimensions.Y * 4)),
@@ -381,8 +383,20 @@ namespace GDGame
             uiTextObject.ControllerList.Add(new UIMouseOverController("moc1", ControllerType.MouseOver,
                  mouseManager, Color.Red, Color.White));
 
+
             uiManager.Add(uiTextObject);
             #endregion Text Object
+
+            texture = textureDictionary["uiMain"];
+
+            transform2D = new Transform2D(new Vector2(resolutionX/2, resolutionY/2), 0, Vector2.One, new Vector2(texture.Width/2, texture.Height/2), new Integer2(100, 100));
+
+            uiTextureObject = new UITextureObject("main", ActorType.UITextureObject,
+                StatusType.Drawn, transform2D, Color.White, 0, SpriteEffects.None,
+                texture,
+                new Microsoft.Xna.Framework.Rectangle(0, 0, texture.Width, texture.Height));
+
+            uiManager.Add(uiTextureObject);
         }
 
         private void InitMenu()
@@ -580,11 +594,11 @@ namespace GDGame
 
             #region Fixed
 
-            Vector3 translation = new Vector3(0, 150, 200);
+            Vector3 translation = new Vector3(0, 300, 200);
 
             Vector3 rotationInDegrees = new Vector3(0, 0, 0);
 
-            transform3D = new Transform3D(translation, rotationInDegrees, Vector3.One, new Vector3(0, -0.20f, -1), Vector3.UnitY);
+            transform3D = new Transform3D(translation, rotationInDegrees, Vector3.One, new Vector3(0, -0.32f, -1), Vector3.UnitY);
 
             camera3D = new Camera3D(" Fixed Camera - Main ",
                 ActorType.Camera3D, StatusType.Update, transform3D,
@@ -1025,6 +1039,12 @@ namespace GDGame
         #region NEW - 26.12.20
 
         //adds a drivable player that can collide against collidable objects and zones
+
+        private void Shoot()
+        {
+
+        }
+
         private void InitializeCollidablePlayer()
         {
             Transform3D transform3D = null;
@@ -1035,7 +1055,7 @@ namespace GDGame
             int primitiveCount;
 
             //set the position
-            transform3D = new Transform3D(new Vector3(0, 0, -75), Vector3.Zero, new Vector3(40, 20, 40),
+            transform3D = new Transform3D(new Vector3(0, 0, -250), Vector3.Zero, new Vector3(40, 20, 40),
                 -Vector3.UnitZ, Vector3.UnitY);
 
             //a unique effectparameters instance for each box in case we want different color, texture, alpha
@@ -1052,7 +1072,8 @@ namespace GDGame
 
             //if we make this a field then we can pass to the 3rd person camera controller
             collidablePlayerObject
-                = new CollidablePlayerObject("collidable player1",
+                = new CollidablePlayerObject(
+                    "player",
                     //this is important as it will determine how we filter collisions in our collidable player CDCR code
                     ActorType.CollidablePlayer,
                     StatusType.Drawn | StatusType.Update,
@@ -1061,7 +1082,7 @@ namespace GDGame
                     vertexData,
                     collisionPrimitive,
                     objectManager,
-                    GameConstants.KeysTwo,
+                    GameConstants.KeysArrows,
                     GameConstants.playerMoveSpeed,
                     GameConstants.playerRotateSpeed,
                     keyboardManager);
@@ -1081,7 +1102,7 @@ namespace GDGame
             ICollisionPrimitive collisionPrimitive = null;
             CollidableZoneObject collidableZoneObject = null;
 
-            transform3D = new Transform3D(new Vector3(0, -10, 0), Vector3.Zero, new Vector3(1000, 1, 1000), Vector3.UnitZ, Vector3.UnitY);
+            transform3D = new Transform3D(new Vector3(0, -50, 0), Vector3.Zero, new Vector3(1000, 1, 1000), Vector3.UnitZ, Vector3.UnitY);
 
             //make the collision primitive - changed slightly to no longer need transform
             collisionPrimitive = new BoxCollisionPrimitive(transform3D);
@@ -1092,6 +1113,20 @@ namespace GDGame
                 collisionPrimitive);
 
             objectManager.Add(collidableZoneObject);
+
+            transform3D = new Transform3D(new Vector3(0, 0, 0), Vector3.Zero, new Vector3(1000, 1000, 1), Vector3.UnitZ, Vector3.UnitY);
+
+            //make the collision primitive - changed slightly to no longer need transform
+            collisionPrimitive = new BoxCollisionPrimitive(transform3D);
+
+            collidableZoneObject = new CollidableZoneObject("kill", ActorType.CollidableDecorator,
+                StatusType.Drawn | StatusType.Update,
+                transform3D,
+                collisionPrimitive);
+
+            objectManager.Add(collidableZoneObject);
+
+
 
             transform3D = new Transform3D(new Vector3(-1000, 0, 0), new Vector3(0, 0, 0), new Vector3(1, 1000, 1000), Vector3.UnitZ, Vector3.UnitY);
 
@@ -1164,13 +1199,12 @@ namespace GDGame
                 collisionPrimitive, objectManager);
 
 
-            transform3D = new Transform3D(new Vector3(180, 0, 0), Vector3.Zero, new Vector3(1 ,1000, 1000), Vector3.UnitZ, Vector3.UnitY);
+            transform3D = new Transform3D(new Vector3(170, 0, 0), Vector3.Zero, new Vector3(1 ,1000, 1000), Vector3.UnitZ, Vector3.UnitY);
 
             //add to the archetype dictionary
             //objectManager.Add(collidablePrimitiveObject);
 
-            effectParameters = new EffectParameters(effectDictionary[GameConstants.Effect_LitTextured],
-                textureDictionary["ship"], Color.White, 1);
+            effectParameters = new EffectParameters(effectDictionary[GameConstants.Effect_LitTextured], textureDictionary["ship"], Color.White, 0);
 
             //get the vertex data object
             vertexData = new VertexData<VertexPositionNormalTexture>(
@@ -1193,13 +1227,12 @@ namespace GDGame
 
             objectManager.Add(collidablePrimitiveObject);
 
-            transform3D = new Transform3D(new Vector3(-180, 0, 0), Vector3.Zero, new Vector3(1, 1000, 1000), Vector3.UnitZ, Vector3.UnitY);
+            transform3D = new Transform3D(new Vector3(-170, 0, 0), Vector3.Zero, new Vector3(1, 1000, 1000), Vector3.UnitZ, Vector3.UnitY);
 
             //add to the archetype dictionary
             //objectManager.Add(collidablePrimitiveObject);
 
-            effectParameters = new EffectParameters(effectDictionary[GameConstants.Effect_LitTextured],
-                textureDictionary["ship"], Color.White, 1);
+            effectParameters = new EffectParameters(effectDictionary[GameConstants.Effect_LitTextured], textureDictionary["ship"], Color.White, 0);
 
             //get the vertex data object
             vertexData = new VertexData<VertexPositionNormalTexture>(
@@ -1320,7 +1353,7 @@ namespace GDGame
             drawnActor3D.EffectParameters.Texture = textureDictionary["texturespace"];
             drawnActor3D.Transform3D.RotationInDegrees = new Vector3(0, 0, 90);
             drawnActor3D.Transform3D.Scale = 100 * new Vector3(2, 10, 2);
-            drawnActor3D.Transform3D.Translation = new Vector3(500, -100, -600);
+            drawnActor3D.Transform3D.Translation = new Vector3(500, -200, -450);
             drawnActor3D.EffectParameters.Alpha = 1f;
 
             drawnActor3D.ControllerList.Add(
@@ -1457,6 +1490,12 @@ namespace GDGame
 
         protected override void Update(GameTime gameTime)
         {
+            if(mouseManager.IsLeftButtonClicked())
+            {
+                Shoot();
+            }
+
+
             if (keyboardManager.IsFirstKeyPress(Keys.N))
             {
                 LevelLoader<PrimitiveObject> levelLoader = new LevelLoader<PrimitiveObject>(
