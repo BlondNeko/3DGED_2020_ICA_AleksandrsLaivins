@@ -30,13 +30,18 @@ namespace GDGame
         private int resolutionX = 1280;
         private int resolutionY = 720;
 
-        private const float SPAWNTIMER = 3f;
+        private const float SPAWNTIMER = 2f;
         private float spawnTimer = SPAWNTIMER;
 
         private const int MAXHEALTH = 100;
         private int currentHealth = MAXHEALTH;
 
+        private const int BASESPEED = 7500;
+
         private int score = 0;
+
+        private float currentSpeed = BASESPEED;
+        private string currentLevel = "Level 1";
 
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
@@ -372,39 +377,40 @@ namespace GDGame
             #endregion Progress Control Left
 
             #region Text Object
-            spriteFont = Content.Load<SpriteFont>("Assets/Fonts/debug");
+            spriteFont = Content.Load<SpriteFont>("Assets/Fonts/ui");
 
             //calculate how big the text is in (w,h)
-            string text = " qq ";
+            string text = "SCORE -[" + score + "]- ";
             Vector2 originalDimensions = spriteFont.MeasureString(text);
 
-            transform2D = new Transform2D(new Vector2(512, 768 - (originalDimensions.Y * 4)),
-                0,
-                4 * Vector2.One,
-                new Vector2(originalDimensions.X / 2, originalDimensions.Y / 2), //this is text???
-                new Integer2(originalDimensions)); //accurate original dimensions
+            transform2D = new Transform2D(new Vector2(resolutionX/2 + (originalDimensions.X /2), 40), 0, new Vector2(2,2), new Vector2(originalDimensions.X, originalDimensions.Y), new Integer2(originalDimensions));
 
-            UITextObject uiTextObject = new UITextObject("hello", ActorType.UIText,
-                StatusType.Update | StatusType.Drawn, transform2D, new Color(0.1f, 0, 0, 1),
+            UITextObject uiTextObject = new UITextObject("score", ActorType.UIText,
+                StatusType.Update | StatusType.Drawn, transform2D, new Color(255, 0, 255, 1),
                 0, SpriteEffects.None, text, spriteFont);
 
-            uiTextObject.ControllerList.Add(new UIMouseOverController("moc1", ControllerType.MouseOver,
-                 mouseManager, Color.Red, Color.White));
+            //uiTextObject.ControllerList.Add(new UIMouseOverController("moc1", ControllerType.MouseOver,
+            //     mouseManager, Color.Red, Color.White));
 
 
             uiManager.Add(uiTextObject);
+
             #endregion Text Object
 
             texture = textureDictionary["uiMain"];
 
-            transform2D = new Transform2D(new Vector2(resolutionX/2, resolutionY/2), 0, Vector2.One, new Vector2(texture.Width/2, texture.Height/2), new Integer2(100, 100));
+            transform2D = new Transform2D(new Vector2(resolutionX / 2, resolutionY / 2), 0, Vector2.One, new Vector2(texture.Width / 2, texture.Height / 2), new Integer2(100, 100));
 
-            uiTextureObject = new UITextureObject("main", ActorType.UITextureObject,
+            uiTextureObject = new UITextureObject("overlay", ActorType.UITextureObject,
                 StatusType.Drawn, transform2D, Color.White, 0, SpriteEffects.None,
                 texture,
                 new Microsoft.Xna.Framework.Rectangle(0, 0, texture.Width, texture.Height));
 
             uiManager.Add(uiTextureObject);
+
+
+
+
         }
 
         private void InitMenu()
@@ -1304,7 +1310,7 @@ namespace GDGame
 
             Vector3 by = new Vector3(rand, 0, transform3D.Translation.Z + 1200);
 
-            curveA.Add(by, new Vector3(1, 0, -1), Vector3.UnitY, 7500); //start position
+            curveA.Add(by, new Vector3(1, 0, -1), Vector3.UnitY, (int)currentSpeed); //start position
 
             collidablePrimitiveObject.ControllerList.Add(new Curve3DController("path", ControllerType.Curve, curveA));
 
@@ -1594,6 +1600,8 @@ namespace GDGame
         #region Update & Draw
         protected override void Update(GameTime gameTime)
         {
+            currentSpeed = BASESPEED - (score * 0.1f);
+
             if(currentHealth <= 0)
             {
                 GameOver(score);
@@ -1603,10 +1611,7 @@ namespace GDGame
             {
                 Shoot();
             }
-            if(keyboardManager.IsFirstKeyPress(Keys.B))
-            {
-                
-            }
+
 
             spawnTimer -= (float)gameTime.ElapsedGameTime.TotalSeconds;
 
@@ -1770,6 +1775,14 @@ namespace GDGame
             {
                 EventDispatcher.Publish(new EventData(EventCategoryType.Menu, EventActionType.OnPause, null));
             }
+            if (keyboardManager.IsFirstKeyPress(Keys.B))
+            {
+                score += 1000;
+                object[] parameters = { 1 }; //will decrease the progress by 1 to its min of 0 (see InitUI)
+                EventDispatcher.Publish(new EventData(EventCategoryType.UI, EventActionType.OnScoreDelta, parameters));
+            }
+
+
             #endregion Menu & UI Demos
 
             #region Camera

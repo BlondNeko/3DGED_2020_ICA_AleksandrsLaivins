@@ -165,6 +165,10 @@
         //sent by player when gains or loses health
         OnHealthDelta,
 
+
+        OnScoreDelta,
+        OnScoreSet,
+
         //sent to set player health to a specific start/end value
         OnHealthSet,
 
