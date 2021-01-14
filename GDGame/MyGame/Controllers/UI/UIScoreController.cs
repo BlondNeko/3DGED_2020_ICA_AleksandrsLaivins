@@ -65,6 +65,7 @@ namespace GDGame.Controllers
             if (eventData.EventActionType == EventActionType.OnScoreDelta)
             {
                 CurrentValue = currentValue + (int)eventData.Parameters[0];
+                
             }
         }
 

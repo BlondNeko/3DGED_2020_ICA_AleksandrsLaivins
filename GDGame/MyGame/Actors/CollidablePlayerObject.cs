@@ -123,8 +123,15 @@ namespace GDLibrary.MyGame
                 {
                     //remove the object
                     object[] parameters = { collidee };
+                    object[] score = { 10 };
                     EventDispatcher.Publish(new EventData(EventCategoryType.Object, EventActionType.OnRemoveActor, parameters));
+                    EventDispatcher.Publish(new EventData(EventCategoryType.UI, EventActionType.OnScoreDelta, score));
+
                 }
+                ////else if(collidee.ActorType == ActorType.CollidablePickupDamage)
+                ////{
+
+                ////}
                 //the boxes on the right that move up and down
                 else if (collidee.ActorType == ActorType.CollidableDecorator)
                 {

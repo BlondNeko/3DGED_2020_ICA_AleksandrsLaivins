@@ -86,6 +86,12 @@ namespace GDLibrary.Actors
                 this.Color, this.LayerDepth, this.SpriteEffects, this.text, this.SpriteFont);
         }
 
+        public string toString()
+        {
+            return text;
+        }
+
+
         #endregion Constructors & Core
     }
 }

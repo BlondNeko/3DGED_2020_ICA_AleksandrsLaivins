@@ -42,6 +42,7 @@ namespace GDLibrary.Managers
         }
         public override void HandleEvent(EventData eventData)
         {
+            
             switch (eventData.EventActionType)
             {
                 case EventActionType.OnAddActor:
@@ -90,6 +91,19 @@ namespace GDLibrary.Managers
             }
         }
 
+        public int GetScore()
+        {
+            //if (eventData.Predicate != null && eventData.Action != null)
+            //{
+            //    DrawnActor2D actor = uiObjectList.Find("score");
+            //    if (actor != null) 
+            //    {
+            //        return actor.ToString();
+            //    }
+            //}
+            return 12;
+        }
+
         /// <summary>
         /// Applies an action to ALL actors found in the list based on a matching predicate (and action) defined in the eventData object
         ///
@@ -115,6 +129,8 @@ namespace GDLibrary.Managers
                 }
             }
         }
+
+
 
         /// <summary>
         /// Add an actor to the ui

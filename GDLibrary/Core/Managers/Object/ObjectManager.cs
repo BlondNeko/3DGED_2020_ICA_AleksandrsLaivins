@@ -111,6 +111,9 @@ namespace GDLibrary.Managers
                 case EventActionType.OnApplyActionToAllActors:
                     ApplyActionToAllActors(eventData);
                     break;
+                case EventActionType.OnScoreDelta:
+                    
+                    break;
             }
 
             //remember to pass the eventData down so the parent class can process pause/unpause
