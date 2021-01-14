@@ -31,6 +31,13 @@ namespace GDLibrary.Utilities
             return randomValue;
         }
 
+        public static int RandomInRange(int min, int max)
+        {
+            Random random = new Random();
+            int randomValue = random.Next(min, max);
+            return randomValue;
+        }
+
         public static Vector2 Lerp(Vector2 a, Vector2 b, float lerpFactor)
         {
             //takes two translations x1,y1 and x2,y2 and interpolates linearly between them using a factor

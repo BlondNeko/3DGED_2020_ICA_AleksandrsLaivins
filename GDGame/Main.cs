@@ -30,6 +30,14 @@ namespace GDGame
         private int resolutionX = 1280;
         private int resolutionY = 720;
 
+        private const float SPAWNTIMER = 3f;
+        private float spawnTimer = SPAWNTIMER;
+
+        private const int MAXHEALTH = 100;
+        private int currentHealth = MAXHEALTH;
+
+        private int score = 0;
+
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
 
@@ -1068,7 +1076,7 @@ namespace GDGame
             vertexData = new VertexData<VertexPositionNormalTexture>(VertexFactory.GetVerticesPositionNormalTexturedDiamond(out primitiveType, out primitiveCount), primitiveType, primitiveCount);
 
             //make a CDCR surface - sphere or box, its up to you - you dont need to pass transform to either primitive anymore
-            collisionPrimitive = new SphereCollisionPrimitive(transform3D, 5);
+            collisionPrimitive = new SphereCollisionPrimitive(transform3D, 20);
 
             //if we make this a field then we can pass to the 3rd person camera controller
             collidablePlayerObject
@@ -1257,7 +1265,7 @@ namespace GDGame
 
         }
 
-        private void InitCollidablePickups()
+        private void NewPickup()
         {
             Transform3D transform3D = null;
             EffectParameters effectParameters = null;
@@ -1266,7 +1274,56 @@ namespace GDGame
             CollidablePrimitiveObject collidablePrimitiveObject = null;
             PrimitiveType primitiveType;
             int primitiveCount;
+            int rand = MathUtility.RandomInRange(-150, 150);
+
+            effectParameters = new EffectParameters(effectDictionary[GameConstants.Effect_LitTextured],
+                textureDictionary["spaceback"], Color.White, 1);
+
+            transform3D = new Transform3D(new Vector3(rand, 0, -1100), Vector3.Zero, new Vector3(10, 10, 10), Vector3.UnitZ, Vector3.UnitY);
+
+            vertexData = new VertexData<VertexPositionNormalTexture>(VertexFactory.GetVerticesPositionNormalTexturedDiamond(out primitiveType, out primitiveCount), primitiveType, primitiveCount);
+
+            collisionPrimitive = new SphereCollisionPrimitive(transform3D, 10);
+
+            collidablePrimitiveObject = new CollidablePickupObject(
+                GameConstants.Primitive_LitTexturedDiamond,
+                ActorType.CollidablePickup,
+                StatusType.Drawn | StatusType.Update,
+                transform3D,
+                effectParameters,
+                vertexData,
+                collisionPrimitive,
+                objectManager,
+                new PickupParameters("health", -10)
+                );
+
+            collidablePrimitiveObject.ControllerList.Add(new RotationController("rot controller1", ControllerType.RotationOverTime, 0.7f, new Vector3(0, 1, 0)));
+
+            Transform3DCurve curveA = new Transform3DCurve(CurveLoopType.Linear); //experiment with other CurveLoopTypes
+            curveA.Add(transform3D.Translation, -Vector3.UnitZ, Vector3.UnitY, 0); //start
+
+            Vector3 by = new Vector3(rand, 0, transform3D.Translation.Z + 1200);
+
+            curveA.Add(by, new Vector3(1, 0, -1), Vector3.UnitY, 7500); //start position
+
+            collidablePrimitiveObject.ControllerList.Add(new Curve3DController("path", ControllerType.Curve, curveA));
+
+            objectManager.Add(collidablePrimitiveObject);
+        }
+
+        private void InitCollidablePickups()
+        {
+            Transform3D transform3D = null;
+            //Transform3D change = null;
+            EffectParameters effectParameters = null;
+            IVertexData vertexData = null;
+            ICollisionPrimitive collisionPrimitive = null;
+            CollidablePrimitiveObject collidablePrimitiveObject = null;
+            PrimitiveType primitiveType;
+            int primitiveCount;
             /************************* Sphere Collision Primitive  *************************/
+
+            int rand = MathUtility.RandomInRange(-100, 100);
 
             transform3D = new Transform3D(new Vector3(-20, 4, 0), Vector3.Zero, new Vector3(4, 12, 4), Vector3.UnitZ, Vector3.UnitY);
 
@@ -1296,6 +1353,48 @@ namespace GDGame
             //add to the archetype dictionary
             //objectManager.Add(collidablePrimitiveObject);
 
+            transform3D = new Transform3D(new Vector3(0, 0, -1100), Vector3.Zero, new Vector3(10, 10, 10), Vector3.UnitZ, Vector3.UnitY);
+
+            vertexData = new VertexData<VertexPositionNormalTexture>(VertexFactory.GetVerticesPositionNormalTexturedDiamond(out primitiveType, out primitiveCount), primitiveType, primitiveCount);
+
+            collisionPrimitive = new SphereCollisionPrimitive(transform3D, 10);
+
+            collidablePrimitiveObject = new CollidablePickupObject(
+                GameConstants.Primitive_LitTexturedDiamond,
+                ActorType.CollidablePickup,
+                StatusType.Drawn | StatusType.Update,
+                transform3D,
+                effectParameters,
+                vertexData,
+                collisionPrimitive, 
+                objectManager,
+                new PickupParameters("health", -10)
+                );
+
+            collidablePrimitiveObject.ControllerList.Add( new RotationController("rot controller1", ControllerType.RotationOverTime, 0.7f, new Vector3(0, 1, 0)));
+
+            Transform3DCurve curveA = new Transform3DCurve(CurveLoopType.Linear); //experiment with other CurveLoopTypes
+            curveA.Add(transform3D.Translation, -Vector3.UnitZ, Vector3.UnitY, 0); //start
+            Vector3 by = new Vector3(rand,0,transform3D.Translation.Z+1200);
+
+            curveA.Add(by, new Vector3(1, 0, -1), Vector3.UnitY, 10000); //start position
+
+            //curveA.Add(new Vector3(0, 5, 50), -Vector3.UnitZ, Vector3.UnitY, 3000); //start position
+            //curveA.Add(new Vector3(0, 5, 20), new Vector3(-1, 0, -1), Vector3.UnitY, 4000); //start position
+            //curveA.Add(new Vector3(0, 5, 10), -Vector3.UnitZ, Vector3.UnitY, 6000); //start position
+
+
+
+            collidablePrimitiveObject.ControllerList.Add(new Curve3DController("enemyPath", ControllerType.Curve, curveA));
+
+
+
+            objectManager.Add(collidablePrimitiveObject);
+
+
+
+
+
             //objectManager.Add(collidablePrimitiveObject);
 
             transform3D = new Transform3D(new Vector3(-20, 4, 0), Vector3.Zero, new Vector3(4, 12, 4), Vector3.UnitZ, Vector3.UnitY);
@@ -1320,7 +1419,7 @@ namespace GDGame
                0.5f, new Vector3(0, 1, 0)));
 
 
-            Transform3DCurve curveA = new Transform3DCurve(CurveLoopType.Oscillate); //experiment with other CurveLoopTypes
+            curveA = new Transform3DCurve(CurveLoopType.Oscillate); //experiment with other CurveLoopTypes
             curveA.Add(transform3D.Translation, -Vector3.UnitZ, Vector3.UnitY, 0); //start
             curveA.Add(new Vector3(0, 5, 80), new Vector3(1, 0, -1), Vector3.UnitY, 1000); //start position
             curveA.Add(new Vector3(0, 5, 50), -Vector3.UnitZ, Vector3.UnitY, 3000); //start position
@@ -1333,9 +1432,10 @@ namespace GDGame
 
 
 
-            objectManager.Add(collidablePrimitiveObject);
+            //objectManager.Add(collidablePrimitiveObject);
 
         }
+
 
         #endregion NEW - 26.12.20
 
@@ -1353,7 +1453,7 @@ namespace GDGame
             drawnActor3D.EffectParameters.Texture = textureDictionary["texturespace"];
             drawnActor3D.Transform3D.RotationInDegrees = new Vector3(0, 0, 90);
             drawnActor3D.Transform3D.Scale = 100 * new Vector3(2, 10, 2);
-            drawnActor3D.Transform3D.Translation = new Vector3(500, -200, -450);
+            drawnActor3D.Transform3D.Translation = new Vector3(500, -225, -450);
             drawnActor3D.EffectParameters.Alpha = 1f;
 
             drawnActor3D.ControllerList.Add(
@@ -1464,6 +1564,11 @@ namespace GDGame
             //objectManager.Add(drawnActor3D);
         }
 
+        private void GameOver(int score)
+        {
+            //gameover screen, reset or quit
+        }
+
         #endregion Initialization - Vertices, Archetypes, Helpers, Drawn Content(e.g. Skybox)
 
         #region Load & Unload Game Assets
@@ -1487,14 +1592,30 @@ namespace GDGame
         #endregion Load & Unload Game Assets
 
         #region Update & Draw
-
         protected override void Update(GameTime gameTime)
         {
+            if(currentHealth <= 0)
+            {
+                GameOver(score);
+            }
+
             if(mouseManager.IsLeftButtonClicked())
             {
                 Shoot();
             }
+            if(keyboardManager.IsFirstKeyPress(Keys.B))
+            {
+                
+            }
 
+            spawnTimer -= (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+            if(spawnTimer < 0)
+            {
+                NewPickup();
+
+                spawnTimer = SPAWNTIMER;
+            }
 
             if (keyboardManager.IsFirstKeyPress(Keys.N))
             {
