@@ -38,10 +38,11 @@ namespace GDGame
 
         private const int BASESPEED = 7500;
 
-        private int score = 0;
+        private int score = 1;
+        private const int LEVELUPSCORE = 1000;
 
         private float currentSpeed = BASESPEED;
-        private string currentLevel = "Level 1";
+        private int currentLevel = 0;
 
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
@@ -388,6 +389,8 @@ namespace GDGame
             UITextObject uiTextObject = new UITextObject("score", ActorType.UIText,
                 StatusType.Update | StatusType.Drawn, transform2D, new Color(255, 0, 255, 1),
                 0, SpriteEffects.None, text, spriteFont);
+
+            uiTextObject.ControllerList.Add(new UIScoreController("scoreUpdate", ControllerType.Score, score, LEVELUPSCORE));
 
             //uiTextObject.ControllerList.Add(new UIMouseOverController("moc1", ControllerType.MouseOver,
             //     mouseManager, Color.Red, Color.White));
@@ -1777,9 +1780,10 @@ namespace GDGame
             }
             if (keyboardManager.IsFirstKeyPress(Keys.B))
             {
-                score += 1000;
-                object[] parameters = { 1 }; //will decrease the progress by 1 to its min of 0 (see InitUI)
+                score += 10;
+                object[] parameters = { 10 }; 
                 EventDispatcher.Publish(new EventData(EventCategoryType.UI, EventActionType.OnScoreDelta, parameters));
+
             }
 
 

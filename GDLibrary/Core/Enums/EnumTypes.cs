@@ -90,7 +90,9 @@
         ColorLerpOverTime,
         MouseOver,
         Progress,
-        ScaleLerpOverTime
+        ScaleLerpOverTime,
+
+        Score
     }
 
     /// <summary>
