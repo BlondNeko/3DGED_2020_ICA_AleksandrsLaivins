@@ -15,7 +15,7 @@ namespace GDLibrary.MyGame
     public class CollidableEnemyObject : CollidablePrimitiveObject
     {
         #region Fields
-        private bool damageDone = false;
+        //private bool damageDone = false;
         private PickupParameters pickupParameters;
         #endregion Fields
 
@@ -59,36 +59,36 @@ namespace GDLibrary.MyGame
                 CollidableZoneObject simpleZoneObject = collidee as CollidableZoneObject;
 
                 //do something based on the zone type - see Main::InitializeCollidableZones() for ID
-                if (simpleZoneObject.ID.Equals("kill") && !damageDone)
+                if (simpleZoneObject.ID.Equals("kill"))
                 {
                     //publish an event e.g sound, health progress
-                    damageDone = true;
-                    object[] parameters = { 1 };
+                    //damageDone = true;
+                    object[] parameters = { -1 };
                     EventDispatcher.Publish(new EventData(EventCategoryType.UI, EventActionType.OnHealthDelta, parameters));
                 }
 
                 //IMPORTANT - setting this to null means that the ApplyInput() method will get called and the player can move through the zone.
-                //Collidee = null;
+                Collidee = null;
             }
-            if (collidee is CollidablePrimitiveObject)
-            {
-                //the boxes on the left that we loaded from level loader
-                if (collidee.ActorType == ActorType.CollidablePlayer)
-                {
-                    //remove the object
-                    damageDone = true;
+            //if (collidee is CollidablePrimitiveObject)
+            //{
+            //    //the boxes on the left that we loaded from level loader
+            //    if (collidee.ActorType == ActorType.CollidablePlayer)
+            //    {
+            //        //remove the object
+            //        //damageDone = true;
 
-                }
-                ////else if(collidee.ActorType == ActorType.CollidablePickupDamage)
-                ////{
+            //    }
+            //    ////else if(collidee.ActorType == ActorType.CollidablePickupDamage)
+            //    ////{
 
-                ////}
-                //the boxes on the right that move up and down
-                //else if (collidee.ActorType == ActorType.CollidableDecorator)
-                //{
-                //    (collidee as DrawnActor3D).EffectParameters.DiffuseColor = Color.Blue;
-                //}
-            }
+            //    ////}
+            //    //the boxes on the right that move up and down
+            //    //else if (collidee.ActorType == ActorType.CollidableDecorator)
+            //    //{
+            //    //    (collidee as DrawnActor3D).EffectParameters.DiffuseColor = Color.Blue;
+            //    //}
+            //}
         }
 
         public new object Clone()

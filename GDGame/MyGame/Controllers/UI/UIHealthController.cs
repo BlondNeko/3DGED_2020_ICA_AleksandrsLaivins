@@ -64,7 +64,7 @@ namespace GDGame.Controllers
         {
             if (eventData.EventActionType == EventActionType.OnHealthDelta)
             {
-                CurrentValue = currentValue - (int)eventData.Parameters[0];
+                currentValue += (int)eventData.Parameters[0];
             }
         }
 
@@ -86,8 +86,9 @@ namespace GDGame.Controllers
         /// <param name="drawnActor">Parent to which this controller is attached</param>
         private void UpdateHealth(UITextObject drawnActor)
         {
-            if (currentValue < 0)
+            if (currentValue <= 0)
             {
+                EventDispatcher.Publish(new EventData(EventCategoryType.Menu, EventActionType.OnPause, null));
                 EventDispatcher.Publish(new EventData(EventCategoryType.Game, EventActionType.OnLose, null));
             }
 

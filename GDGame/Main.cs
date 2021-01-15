@@ -371,9 +371,9 @@ namespace GDGame
             //uiTextureObject.ControllerList.Add(new UIMouseController("moc1", ControllerType.MouseOver,
             //    this.mouseManager));
 
-            uiTextureObject.ControllerList.Add(new UIProgressController("pc1", ControllerType.Progress, 0, 10));
+            //uiTextureObject.ControllerList.Add(new UIProgressController("pc1", ControllerType.Progress, 0, 10));
 
-            uiManager.Add(uiTextureObject);
+            //uiManager.Add(uiTextureObject);
             #endregion Progress Control Left
 
             texture = textureDictionary["uiMain"];
@@ -1134,29 +1134,29 @@ namespace GDGame
             ICollisionPrimitive collisionPrimitive = null;
             CollidableZoneObject collidableZoneObject = null;
 
-            transform3D = new Transform3D(new Vector3(0, -50, 0), Vector3.Zero, new Vector3(1000, 1, 1000), Vector3.UnitZ, Vector3.UnitY);
+            //transform3D = new Transform3D(new Vector3(0, -50, 0), Vector3.Zero, new Vector3(1000, 1, 1000), Vector3.UnitZ, Vector3.UnitY);
 
-            //make the collision primitive - changed slightly to no longer need transform
+            ////make the collision primitive - changed slightly to no longer need transform
+            //collisionPrimitive = new BoxCollisionPrimitive(transform3D);
+
+            //collidableZoneObject = new CollidableZoneObject("game end", ActorType.CollidableZone,
+            //    StatusType.Drawn | StatusType.Update,
+            //    transform3D,
+            //    collisionPrimitive);
+
+            //objectManager.Add(collidableZoneObject);
+
+
+
+
+
+
+
+            transform3D = new Transform3D(new Vector3(0, 0, -150), Vector3.Zero, new Vector3(1000, 1000, 1), Vector3.UnitZ, Vector3.UnitY);
+
             collisionPrimitive = new BoxCollisionPrimitive(transform3D);
 
-            collidableZoneObject = new CollidableZoneObject("game end", ActorType.CollidableZone,
-                StatusType.Drawn | StatusType.Update,
-                transform3D,
-                collisionPrimitive);
-
-            objectManager.Add(collidableZoneObject);
-
-
-
-
-
-
-
-            transform3D = new Transform3D(new Vector3(0, 0, 0), Vector3.Zero, new Vector3(1000, 1000, 1), Vector3.UnitZ, Vector3.UnitY);
-
-            collisionPrimitive = new BoxCollisionPrimitive(transform3D);
-
-            collidableZoneObject = new CollidableZoneObject("kill", ActorType.CollidableDecorator,
+            collidableZoneObject = new CollidableZoneObject("kill", ActorType.CollidableZone,
                 StatusType.Drawn | StatusType.Update,
                 transform3D,
                 collisionPrimitive);
@@ -1306,16 +1306,16 @@ namespace GDGame
             CollidablePrimitiveObject collidablePrimitiveObject = null;
             PrimitiveType primitiveType;
             int primitiveCount;
-            int rand = MathUtility.RandomInRange(-150, 150);
+            int rand = MathUtility.RandomInRange(-200, 200);
 
             effectParameters = new EffectParameters(effectDictionary[GameConstants.Effect_LitTextured],
                 textureDictionary["spaceback"], Color.White, 1);
 
-            transform3D = new Transform3D(new Vector3(rand, 0, -1100), Vector3.Zero, new Vector3(10, 10, 10), Vector3.UnitZ, Vector3.UnitY);
+            transform3D = new Transform3D(new Vector3(rand, 0, -1100), Vector3.Zero, new Vector3(20, 20, 20), Vector3.UnitZ, Vector3.UnitY);
 
             vertexData = new VertexData<VertexPositionNormalTexture>(VertexFactory.GetVerticesPositionNormalTexturedDiamond(out primitiveType, out primitiveCount), primitiveType, primitiveCount);
 
-            collisionPrimitive = new SphereCollisionPrimitive(transform3D, 10);
+            collisionPrimitive = new SphereCollisionPrimitive(transform3D, 20);
 
             collidablePrimitiveObject = new CollidableEnemyObject(
                 GameConstants.Primitive_LitTexturedDiamond,
@@ -1326,7 +1326,7 @@ namespace GDGame
                 vertexData,
                 collisionPrimitive,
                 objectManager,
-                new PickupParameters("health", -10)
+                new PickupParameters("health", -1)
                 );
 
             collidablePrimitiveObject.ControllerList.Add(new RotationController("rot controller1", ControllerType.RotationOverTime, 0.7f, new Vector3(0, 1, 0)));
@@ -1391,7 +1391,7 @@ namespace GDGame
 
             collisionPrimitive = new SphereCollisionPrimitive(transform3D, 10);
 
-            collidablePrimitiveObject = new CollidableEnemyObject(
+            collidablePrimitiveObject = new CollidablePickupObject(
                 GameConstants.Primitive_LitTexturedDiamond,
                 ActorType.CollidablePickup,
                 StatusType.Drawn | StatusType.Update,
@@ -1400,7 +1400,7 @@ namespace GDGame
                 vertexData,
                 collisionPrimitive, 
                 objectManager,
-                new PickupParameters("health", -10)
+                new PickupParameters("health", 10)
                 );
 
             collidablePrimitiveObject.ControllerList.Add( new RotationController("rot controller1", ControllerType.RotationOverTime, 0.7f, new Vector3(0, 1, 0)));
@@ -1787,16 +1787,16 @@ namespace GDGame
                 EventDispatcher.Publish(new EventData(EventCategoryType.Menu, EventActionType.OnPlay, null));
             }
 
-            if (keyboardManager.IsFirstKeyPress(Keys.Up))
-            {
-                object[] parameters = { 1 }; //will increase the progress by 1 to its max of 10 (see InitUI)
-                EventDispatcher.Publish(new EventData(EventCategoryType.UI, EventActionType.OnHealthDelta, parameters));
-            }
-            else if (keyboardManager.IsFirstKeyPress(Keys.Down))
-            {
-                object[] parameters = { -1 }; //will decrease the progress by 1 to its min of 0 (see InitUI)
-                EventDispatcher.Publish(new EventData(EventCategoryType.UI, EventActionType.OnHealthDelta, parameters));
-            }
+            //if (keyboardManager.IsFirstKeyPress(Keys.Up))
+            //{
+            //    object[] parameters = { 1 }; //will increase the progress by 1 to its max of 10 (see InitUI)
+            //    EventDispatcher.Publish(new EventData(EventCategoryType.UI, EventActionType.OnHealthDelta, parameters));
+            //}
+            //else if (keyboardManager.IsFirstKeyPress(Keys.Down))
+            //{
+            //    object[] parameters = { -1 }; //will decrease the progress by 1 to its min of 0 (see InitUI)
+            //    EventDispatcher.Publish(new EventData(EventCategoryType.UI, EventActionType.OnHealthDelta, parameters));
+            //}
 
             if (keyboardManager.IsFirstKeyPress(Keys.F5)) //game -> menu
             {

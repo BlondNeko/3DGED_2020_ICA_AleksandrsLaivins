@@ -64,7 +64,7 @@ namespace GDGame.Controllers
         {
             if (eventData.EventActionType == EventActionType.OnHealthDelta)
             {
-                CurrentValue = currentValue + (int)eventData.Parameters[0];
+                //CurrentValue = currentValue + (int)eventData.Parameters[0];
             }
         }
 
