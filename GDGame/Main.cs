@@ -407,11 +407,11 @@ namespace GDGame
             //     mouseManager, Color.Red, Color.White));
 
             uiManager.Add(uiTextObject);
-
-            spriteFont = Content.Load<SpriteFont>("Assets/Fonts/ui");
+            uiTextObject = null;
+            //spriteFont = Content.Load<SpriteFont>("Assets/Fonts/ui");
 
             //calculate how big the text is in (w,h)
-            text = "Health -[0]- ";
+            text = "SHIELD HEALTH -[0]- ";
             originalDimensions = spriteFont.MeasureString(text);
 
             transform2D = new Transform2D(new Vector2(resolutionX / 2 + (originalDimensions.X / 2) + (500), 40), 0, new Vector2(2, 2), new Vector2(originalDimensions.X, originalDimensions.Y), new Integer2(originalDimensions));
@@ -420,7 +420,7 @@ namespace GDGame
                 StatusType.Update | StatusType.Drawn, transform2D, new Color(255, 0, 255, 1),
                 0, SpriteEffects.None, text, spriteFont);
 
-            uiTextObject.ControllerList.Add(new UIScoreController("healtheUpdate", ControllerType.Health, currentHealth));
+            uiTextObject.ControllerList.Add(new UIHealthController("healtheUpdate", ControllerType.Health, currentHealth, MAXHEALTH));
 
             uiManager.Add(uiTextObject);
 
@@ -1139,12 +1139,18 @@ namespace GDGame
             //make the collision primitive - changed slightly to no longer need transform
             collisionPrimitive = new BoxCollisionPrimitive(transform3D);
 
-            collidableZoneObject = new CollidableZoneObject("game end", ActorType.CollidableDecorator,
+            collidableZoneObject = new CollidableZoneObject("game end", ActorType.CollidableZone,
                 StatusType.Drawn | StatusType.Update,
                 transform3D,
                 collisionPrimitive);
 
             objectManager.Add(collidableZoneObject);
+
+
+
+
+
+
 
             transform3D = new Transform3D(new Vector3(0, 0, 0), Vector3.Zero, new Vector3(1000, 1000, 1), Vector3.UnitZ, Vector3.UnitY);
 
@@ -1156,6 +1162,9 @@ namespace GDGame
                 collisionPrimitive);
 
             objectManager.Add(collidableZoneObject);
+
+
+
 
 
 
@@ -1308,7 +1317,7 @@ namespace GDGame
 
             collisionPrimitive = new SphereCollisionPrimitive(transform3D, 10);
 
-            collidablePrimitiveObject = new CollidablePickupObject(
+            collidablePrimitiveObject = new CollidableEnemyObject(
                 GameConstants.Primitive_LitTexturedDiamond,
                 ActorType.CollidablePickup,
                 StatusType.Drawn | StatusType.Update,
@@ -1382,7 +1391,7 @@ namespace GDGame
 
             collisionPrimitive = new SphereCollisionPrimitive(transform3D, 10);
 
-            collidablePrimitiveObject = new CollidablePickupObject(
+            collidablePrimitiveObject = new CollidableEnemyObject(
                 GameConstants.Primitive_LitTexturedDiamond,
                 ActorType.CollidablePickup,
                 StatusType.Drawn | StatusType.Update,

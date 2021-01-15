@@ -58,18 +58,6 @@ namespace GDLibrary.MyGame
 
         protected override void HandleInput(GameTime gameTime)
         {
-            //if (keyboardManager.IsKeyDown(moveKeys[0])) //Forward
-            //{
-            //    Transform3D.TranslateIncrement
-            //        = Transform3D.Look * gameTime.ElapsedGameTime.Milliseconds
-            //                * moveSpeed;
-            //}
-            //else if (keyboardManager.IsKeyDown(moveKeys[1])) //Backward
-            //{
-            //    Transform3D.TranslateIncrement
-            //       = -Transform3D.Look * gameTime.ElapsedGameTime.Milliseconds
-            //               * moveSpeed;
-            //}
 
             if (keyboardManager.IsKeyDown(moveKeys[2])) //Left
             {
@@ -84,15 +72,6 @@ namespace GDLibrary.MyGame
                             * moveSpeed;
             }
 
-
-            //if (keyboardManager.IsKeyDown(moveKeys[2])) //Left
-            //{
-            //    Transform3D.RotateIncrement = gameTime.ElapsedGameTime.Milliseconds * rotationSpeed;
-            //}
-            //else if (keyboardManager.IsKeyDown(moveKeys[3])) //Right
-            //{
-            //    Transform3D.RotateIncrement = -gameTime.ElapsedGameTime.Milliseconds * rotationSpeed;
-            //}
         }
 
         /********************************************************************************************/

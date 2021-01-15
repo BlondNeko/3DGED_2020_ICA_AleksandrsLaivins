@@ -17,7 +17,8 @@ namespace GDLibrary.Core.Managers.State
 
         public override void SubscribeToEvents()
         {
-            //add new events here...
+            EventDispatcher.Subscribe(EventCategoryType.Game, HandleEvent);
+            //we want to subscribe to menu
 
             base.SubscribeToEvents();
         }
@@ -25,7 +26,13 @@ namespace GDLibrary.Core.Managers.State
         public override void HandleEvent(EventData eventData)
         {
             //add new if...else if statements to handle events here...
-
+            switch (eventData.EventActionType)
+            {
+                case EventActionType.OnLose:
+                    EventDispatcher.Publish(new EventData(EventCategoryType.Menu, EventActionType.OnPause, null));
+                    
+                    break;
+            }
             //remember to pass the eventData down so the parent class can process pause/unpause
             base.HandleEvent(eventData);
         }

@@ -45,6 +45,7 @@ namespace GDLibrary.Actors
             {
                 collisionPrimitive.Update(gameTime, Transform3D);
             }
+
         }
     }
 }

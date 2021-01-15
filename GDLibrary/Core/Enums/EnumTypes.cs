@@ -124,7 +124,8 @@
         Object,
         Opacity,
         UIPicking,
-        Scheduler
+        Scheduler,
+        Game
         //add more here...
     }
 

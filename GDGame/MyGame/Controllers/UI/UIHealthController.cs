@@ -64,7 +64,7 @@ namespace GDGame.Controllers
         {
             if (eventData.EventActionType == EventActionType.OnHealthDelta)
             {
-                CurrentValue = currentValue + (int)eventData.Parameters[0];
+                CurrentValue = currentValue - (int)eventData.Parameters[0];
             }
         }
 
@@ -88,10 +88,10 @@ namespace GDGame.Controllers
         {
             if (currentValue < 0)
             {
-                EventDispatcher.Publish(new EventData(EventCategoryType.Menu, EventActionType.OnPause, null));
+                EventDispatcher.Publish(new EventData(EventCategoryType.Game, EventActionType.OnLose, null));
             }
 
-            drawnActor.Text = "SCORE -[" + currentValue + "]- ";
+            drawnActor.Text = "SHIELD HEALTH -[" + currentValue + "]- ";
         }
 
         //to do...Equals, GetHashCode, Clone
