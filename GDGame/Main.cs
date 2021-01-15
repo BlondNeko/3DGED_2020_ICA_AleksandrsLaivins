@@ -506,16 +506,23 @@ namespace GDGame
 
             //play
             transform2D = new Transform2D(screenCentre - new Vector2(0, 50), 0, Vector2.One, origin, imageDimensions);
-            uiObject = new UIButtonObject("play", ActorType.UITextureObject, StatusType.Drawn,
+            uiObject = new UIButtonObject("play", ActorType.UITextureObject, StatusType.Drawn | StatusType.Update,
                 transform2D, Color.White, 1, SpriteEffects.None, texture,
                 new Microsoft.Xna.Framework.Rectangle(0, 0, texture.Width, texture.Height),
                 "Play",
                 fontDictionary["menu"],
                 new Vector2(1, 1),
-                Color.Blue,
+                Color.Black,
                 new Vector2(0, 0));
-            menuManager.Add("main", uiObject);
 
+            uiObject.ControllerList.Add(new UIMouseOverController("moc2", ControllerType.MouseOver,
+                 mouseManager, Color.BlueViolet, Color.White));
+
+            uiObject.ControllerList.Add(new UIScaleLerpController("slc2", ControllerType.ScaleLerpOverTime,
+              mouseManager, new TrigonometricParameters(0.02f, 1, 0)));
+
+
+            menuManager.Add("main", uiObject);
             //exit
             transform2D = new Transform2D(screenCentre + new Vector2(0, 50), 0, Vector2.One, origin, imageDimensions);
             uiObject = new UIButtonObject("exit", ActorType.UITextureObject,
@@ -525,11 +532,11 @@ namespace GDGame
              "Exit",
              fontDictionary["menu"],
              new Vector2(1, 1),
-             Color.Blue,
+             Color.Black,
              new Vector2(0, 0));
 
             uiObject.ControllerList.Add(new UIMouseOverController("moc1", ControllerType.MouseOver,
-                 mouseManager, Color.Red, Color.White));
+                 mouseManager, Color.BlueViolet, Color.White));
 
             uiObject.ControllerList.Add(new UIScaleLerpController("slc1", ControllerType.ScaleLerpOverTime,
               mouseManager, new TrigonometricParameters(0.02f, 1, 0)));
@@ -540,6 +547,19 @@ namespace GDGame
 
             //finally dont forget to SetScene to say which menu should be drawn/updated!
             menuManager.SetScene("main");
+
+            SpriteFont spriteFont = Content.Load<SpriteFont>("Assets/Fonts/ui");
+
+            string text = " -[  VOID SCHIZM  ]-  ";
+            Vector2 originalDimensions = spriteFont.MeasureString(text);
+
+            transform2D = new Transform2D(new Vector2(965, 200), 0, new Vector2(5, 5), new Vector2(originalDimensions.X, originalDimensions.Y), new Integer2(originalDimensions));
+
+            UITextObject uiTextObject = new UITextObject("health", ActorType.UIText,
+                StatusType.Update | StatusType.Drawn, transform2D, new Color(255, 0, 255, 1),
+                0, SpriteEffects.None, text, spriteFont);
+
+            menuManager.Add("main", uiTextObject);
         }
 
         private void InitEventDispatcher()
