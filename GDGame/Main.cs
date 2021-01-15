@@ -36,7 +36,7 @@ namespace GDGame
         private const int MAXHEALTH = 100;
         private int currentHealth = MAXHEALTH;
 
-        private const int BASESPEED = 7500;
+        private const int BASESPEED = 5000;
 
         private int score;
 
@@ -296,7 +296,7 @@ namespace GDGame
             #region Debug
 #if DEBUG
             //debug info
-            InitDebug();
+            //InitDebug();
 #endif
             #endregion Debug
 
@@ -361,7 +361,7 @@ namespace GDGame
                 new Microsoft.Xna.Framework.Rectangle(0, 0, texture.Width, texture.Height), //how much of source image do we want to draw?
                 mouseManager);
 
-            uiManager.Add(uiMouseObject);
+            //uiManager.Add(uiMouseObject);
             #endregion Mouse Reticule & Text
 
 
@@ -1167,7 +1167,7 @@ namespace GDGame
             vertexData = new VertexData<VertexPositionNormalTexture>(VertexFactory.GetVerticesPositionNormalTexturedDiamond(out primitiveType, out primitiveCount), primitiveType, primitiveCount);
 
             //make a CDCR surface - sphere or box, its up to you - you dont need to pass transform to either primitive anymore
-            collisionPrimitive = new SphereCollisionPrimitive(transform3D, 20);
+            collisionPrimitive = new SphereCollisionPrimitive(transform3D, 30);
 
             //if we make this a field then we can pass to the 3rd person camera controller
             collidablePlayerObject
@@ -1186,8 +1186,8 @@ namespace GDGame
                     GameConstants.playerRotateSpeed,
                     keyboardManager);
 
-            
 
+            collidablePlayerObject.ControllerList.Add( new RotationController("rot controller1", ControllerType.RotationOverTime, 6f, new Vector3(0, 1, 0)));
 
             objectManager.Add(collidablePlayerObject);
         }
@@ -1222,7 +1222,7 @@ namespace GDGame
 
 
 
-            transform3D = new Transform3D(new Vector3(0, 0, -150), Vector3.Zero, new Vector3(1000, 1000, 1), Vector3.UnitZ, Vector3.UnitY);
+            transform3D = new Transform3D(new Vector3(0, 0, -210), Vector3.Zero, new Vector3(1000, 1000, 0), Vector3.UnitZ, Vector3.UnitY);
 
             collisionPrimitive = new BoxCollisionPrimitive(transform3D);
 
@@ -1309,7 +1309,7 @@ namespace GDGame
                 collisionPrimitive, objectManager);
 
 
-            transform3D = new Transform3D(new Vector3(170, 0, 0), Vector3.Zero, new Vector3(1 ,1000, 1000), Vector3.UnitZ, Vector3.UnitY);
+            transform3D = new Transform3D(new Vector3(250, 0, 0), Vector3.Zero, new Vector3(1 ,1000, 1000), Vector3.UnitZ, Vector3.UnitY);
 
             //add to the archetype dictionary
             //objectManager.Add(collidablePrimitiveObject);
@@ -1337,7 +1337,7 @@ namespace GDGame
 
             objectManager.Add(collidablePrimitiveObject);
 
-            transform3D = new Transform3D(new Vector3(-170, 0, 0), Vector3.Zero, new Vector3(1, 1000, 1000), Vector3.UnitZ, Vector3.UnitY);
+            transform3D = new Transform3D(new Vector3(-250, 0, 0), Vector3.Zero, new Vector3(1, 1000, 1000), Vector3.UnitZ, Vector3.UnitY);
 
             //add to the archetype dictionary
             //objectManager.Add(collidablePrimitiveObject);
@@ -1409,6 +1409,10 @@ namespace GDGame
             curveA.Add(by, new Vector3(1, 0, -1), Vector3.UnitY, (int)currentSpeed); //start position
 
             collidablePrimitiveObject.ControllerList.Add(new Curve3DController("path", ControllerType.Curve, curveA));
+
+            collidablePrimitiveObject.ControllerList.Add(
+                new RotationController("rot controller1", ControllerType.RotationOverTime,
+                0.2f, new Vector3(0, 1, 0)));
 
             objectManager.Add(collidablePrimitiveObject);
         }
@@ -1491,7 +1495,7 @@ namespace GDGame
 
 
 
-            objectManager.Add(collidablePrimitiveObject);
+            //objectManager.Add(collidablePrimitiveObject);
 
 
 
@@ -1701,9 +1705,17 @@ namespace GDGame
         #region Update & Draw
         protected override void Update(GameTime gameTime)
         {
-            score += currentLevel;
-            currentSpeed = BASESPEED - (score * currentLevel);
+            
 
+            if(currentSpeed == 1000)
+            {
+                //currentSpeed += 0;
+            }
+            else
+            {
+                score += currentLevel;
+                currentSpeed = BASESPEED - (score * currentLevel);
+            }
             
 
             if(currentHealth <= 0)
