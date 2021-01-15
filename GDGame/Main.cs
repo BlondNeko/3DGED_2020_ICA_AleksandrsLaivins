@@ -526,6 +526,8 @@ namespace GDGame
 
             menuManager.Add("main", uiObject);
 
+            menuManager.Add("exit", uiObject);
+
             //finally dont forget to SetScene to say which menu should be drawn/updated!
             menuManager.SetScene("main");
         }
@@ -1707,9 +1709,17 @@ namespace GDGame
         {
             
 
-            if(currentSpeed == 1000)
+            if(currentSpeed == 1250)
             {
-                //currentSpeed += 0;
+                if(currentSpeed == 750)
+                {
+                    score += currentLevel;
+                    currentSpeed = BASESPEED - (score * 0.25f);
+                }
+                else
+                {
+
+                }
             }
             else
             {
