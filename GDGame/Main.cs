@@ -559,6 +559,19 @@ namespace GDGame
             //add to the dictionary
             transform3DCurveDictionary.Add("enemypath", curveA);
 
+
+            curveA = new Transform3DCurve(CurveLoopType.Linear); //experiment with other CurveLoopTypes
+            curveA.Add(new Vector3(0, 5, 100), -Vector3.UnitZ, Vector3.UnitY, 0); //start
+            curveA.Add(new Vector3(0, 5, 80), new Vector3(1, 0, -1), Vector3.UnitY, 1000); //start position
+            curveA.Add(new Vector3(0, 5, 50), -Vector3.UnitZ, Vector3.UnitY, 3000); //start position
+            curveA.Add(new Vector3(0, 5, 20), new Vector3(-1, 0, -1), Vector3.UnitY, 4000); //start position
+            curveA.Add(new Vector3(0, 5, 10), -Vector3.UnitZ, Vector3.UnitY, 6000); //start position
+
+            //add to the dictionary
+            transform3DCurveDictionary.Add("introCam", curveA);
+
+
+
         }
 
         private void InitRails()
@@ -653,6 +666,49 @@ namespace GDGame
             cameraManager.Add(camera3D);
 
             #endregion Fixed
+
+            #region Fixed
+
+            translation = new Vector3(0, 300, 200);
+
+            rotationInDegrees = new Vector3(0, 0, 0);
+
+            transform3D = new Transform3D(translation, rotationInDegrees, Vector3.One, new Vector3(0, -0.32f, -1), Vector3.UnitY);
+
+            camera3D = new Camera3D(" Fixed Camera - Main 2",
+                ActorType.Camera3D, StatusType.Update, transform3D,
+                ProjectionParameters.StandardDeepSixteenTen,
+                viewPort);
+
+            
+            
+
+            Transform3DCurve curveA = new Transform3DCurve(CurveLoopType.Constant); //experiment with other CurveLoopTypes
+            curveA.Add(new Vector3(0, 5, 100), -Vector3.UnitZ, Vector3.UnitY, 0); //start
+            curveA.Add(new Vector3(0, 5, 80), new Vector3(1, 0, -1), Vector3.UnitY, 1000); //start position
+            curveA.Add(new Vector3(0, 5, 50), -Vector3.UnitZ, Vector3.UnitY, 3000); //start position
+            curveA.Add(new Vector3(0, 5, 20), new Vector3(-1, 0, -1), Vector3.UnitY, 4000); //start position
+            curveA.Add(new Vector3(0, 300, 200), new Vector3(0, -0.32f, -1), Vector3.UnitY, 6000); //start position
+
+            transform3DCurveDictionary.Add("cameraCurve", curveA);
+
+            curveA = new Transform3DCurve(CurveLoopType.Constant); //experiment with other CurveLoopTypes
+            curveA.Add(new Vector3(0, 5, 100), -Vector3.UnitZ, Vector3.UnitY, 0); //start
+            curveA.Add(new Vector3(0, 5, 80), new Vector3(1, 0, -1), Vector3.UnitY, 500); //start position
+            curveA.Add(new Vector3(0, 5, 50), -Vector3.UnitZ, Vector3.UnitY, 1500); //start position
+            curveA.Add(new Vector3(0, 5, 20), new Vector3(-1, 0, -1), Vector3.UnitY, 3000); //start position
+            curveA.Add(translation, transform3D.Look, Vector3.UnitY, 4000); //start position
+
+            transform3DCurveDictionary.Add("cameraCurve2", curveA);
+
+            camera3D.ControllerList.Add(new Curve3DController("intro curve", ControllerType.Curve, transform3DCurveDictionary["cameraCurve"]));
+
+            //camera3D.ControllerList.Add(new Curve3DController(GameConstants.Camera_NonCollidableCurveMainArena, ControllerType.Curve, transform3DCurveDictionary["cameraCurve2"]));
+
+            cameraManager.Add(camera3D);
+
+            #endregion Fixed
+
 
             #region Collidable Camera - 3rd Person
 
@@ -1729,17 +1785,7 @@ namespace GDGame
 #if DEMO
 
             #region Object Manager
-            if (keyboardManager.IsFirstKeyPress(Keys.R))
-            {
-                EventDispatcher.Publish(new EventData(
-                EventCategoryType.Object,
-                EventActionType.OnApplyActionToFirstMatchActor,
-                (actor) => actor.StatusType = StatusType.Drawn | StatusType.Update, //Action
-                (actor) => actor.ActorType == ActorType.Decorator
-                && actor.ID.Equals("pyramid1"), //Predicate
-                null //parameters
-                ));
-            }
+
             #endregion Object Manager
 
             #region Sound Demos
@@ -1835,15 +1881,6 @@ namespace GDGame
             {
                 EventDispatcher.Publish(new EventData(EventCategoryType.Menu, EventActionType.OnPause, null));
             }
-
-            //EventDispatcher.Publish(new EventData(
-            //EventCategoryType.UI, 
-            //EventActionType.OnApplyActionToFirstMatchActor, 
-            //(actor) => actor.StatusType = StatusType.Drawn | StatusType.Update, 
-            //(actor) => actor.ActorType == ActorType.UIText 
-            //&& actor.ID.Equals("score"), 
-            //null));
-
             #endregion Menu & UI Demos
 
             #region Camera
@@ -1852,6 +1889,13 @@ namespace GDGame
                 cameraManager.CycleActiveCamera();
                 EventDispatcher.Publish(new EventData(EventCategoryType.Camera,
                     EventActionType.OnCameraCycle, null));
+            }
+
+            if (keyboardManager.IsFirstKeyPress(Keys.Space))
+            {
+                cameraManager.CycleActiveCamera();
+                EventDispatcher.Publish(new EventData(EventCategoryType.Camera,
+                    EventActionType.OnCameraSetActive, new object[] { 0 }));
             }
             #endregion Camera
 
