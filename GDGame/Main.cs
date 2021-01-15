@@ -155,6 +155,9 @@ namespace GDGame
             soundManager.Add(new GDLibrary.Managers.Cue("hitbad",
                 Content.Load<SoundEffect>("Assets/Audio/Effects/hitbad"), SoundCategoryType.Explosion, new Vector3(1, 0, 0), false));
 
+            soundManager.Add(new GDLibrary.Managers.Cue("end",
+                Content.Load<SoundEffect>("Assets/Audio/Effects/end"), SoundCategoryType.Explosion, new Vector3(1, 0, 0), false));
+
             soundManager.Add(new GDLibrary.Managers.Cue("bg1",
                 Content.Load<SoundEffect>("Assets/Audio/bg/bg1"), SoundCategoryType.BackgroundMusic, new Vector3(1, 0, 0), false));
 
@@ -1707,8 +1710,6 @@ namespace GDGame
         #region Update & Draw
         protected override void Update(GameTime gameTime)
         {
-            
-
             if(currentSpeed == 1250)
             {
                 if(currentSpeed == 750)

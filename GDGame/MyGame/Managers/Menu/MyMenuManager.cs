@@ -29,6 +29,22 @@ namespace GDGame.MyGame.Managers
                     this.StatusType = StatusType.Drawn | StatusType.Update;
                 else if (eventData.EventActionType == EventActionType.OnPlay)
                     this.StatusType = StatusType.Off;
+                else if(eventData.EventActionType == EventActionType.OnLose)
+                {
+                    AudioListener listener = new AudioListener();
+                    listener.Position = new Vector3(0, 5, 50);
+                    listener.Forward = -Vector3.UnitZ;
+                    listener.Up = Vector3.UnitY;
+
+                    AudioEmitter emitter = new AudioEmitter();
+                    emitter.DopplerScale = 1;
+                    emitter.Position = new Vector3(0, 5, 0);
+                    emitter.Forward = Vector3.UnitZ;
+                    emitter.Up = Vector3.UnitY;
+
+                    object[] parameters = { "end", listener, emitter };
+                    EventDispatcher.Publish(new EventData(EventCategoryType.Sound, EventActionType.OnPlay3D, parameters));
+                }
             }
         }
 

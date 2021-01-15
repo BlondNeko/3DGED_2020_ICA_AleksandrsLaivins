@@ -105,11 +105,10 @@ namespace GDGame.Controllers
                 emitter.Up = Vector3.UnitY;
 
                 object[] parameters = { "hitbad", listener, emitter };
-                EventDispatcher.Publish(new EventData(EventCategoryType.Sound,
-                    EventActionType.OnPlay3D, parameters));
+                //EventDispatcher.Publish(new EventData(EventCategoryType.Sound, EventActionType.OnPlay3D, parameters));
 
                 EventDispatcher.Publish(new EventData(EventCategoryType.Menu, EventActionType.OnPause, null));
-                EventDispatcher.Publish(new EventData(EventCategoryType.Game, EventActionType.OnLose, null));
+                EventDispatcher.Publish(new EventData(EventCategoryType.Menu, EventActionType.OnLose, null));
             }
 
             drawnActor.Text = "SHIELD HEALTH -[" + currentValue + "]- ";
