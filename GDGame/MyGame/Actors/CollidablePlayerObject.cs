@@ -5,6 +5,7 @@ using GDLibrary.Interfaces;
 using GDLibrary.Managers;
 using GDLibrary.Parameters;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Input;
 
 namespace GDLibrary.MyGame
@@ -100,6 +101,21 @@ namespace GDLibrary.MyGame
                 //the boxes on the left that we loaded from level loader
                 if (collidee.ActorType == ActorType.CollidablePickup)
                 {
+                    // soundManager.Play2D("smokealarm");
+                    AudioListener listener = new AudioListener();
+                    listener.Position = new Vector3(0, 5, 50);
+                    listener.Forward = -Vector3.UnitZ;
+                    listener.Up = Vector3.UnitY;
+
+                    AudioEmitter emitter = new AudioEmitter();
+                    emitter.DopplerScale = 1;
+                    emitter.Position = new Vector3(0, 5, 0);
+                    emitter.Forward = Vector3.UnitZ;
+                    emitter.Up = Vector3.UnitY;
+
+                    object[] parametersS = { "hitgood", listener, emitter };
+                    EventDispatcher.Publish(new EventData(EventCategoryType.Sound,
+                        EventActionType.OnPlay3D, parametersS));
                     //remove the object
                     object[] parameters = { collidee };
                     object[] score = { 10 };

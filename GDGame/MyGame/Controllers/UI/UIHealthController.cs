@@ -4,6 +4,7 @@ using GDLibrary.Enums;
 using GDLibrary.Events;
 using GDLibrary.Interfaces;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 
 namespace GDGame.Controllers
 {
@@ -88,6 +89,25 @@ namespace GDGame.Controllers
         {
             if (currentValue <= 0)
             {
+                object[] parameters1 = { "bg1" };
+                EventDispatcher.Publish(new EventData(EventCategoryType.Sound,
+                    EventActionType.OnStop, parameters1));
+
+                AudioListener listener = new AudioListener();
+                listener.Position = new Vector3(0, 5, 50);
+                listener.Forward = -Vector3.UnitZ;
+                listener.Up = Vector3.UnitY;
+
+                AudioEmitter emitter = new AudioEmitter();
+                emitter.DopplerScale = 1;
+                emitter.Position = new Vector3(0, 5, 0);
+                emitter.Forward = Vector3.UnitZ;
+                emitter.Up = Vector3.UnitY;
+
+                object[] parameters = { "hitbad", listener, emitter };
+                EventDispatcher.Publish(new EventData(EventCategoryType.Sound,
+                    EventActionType.OnPlay3D, parameters));
+
                 EventDispatcher.Publish(new EventData(EventCategoryType.Menu, EventActionType.OnPause, null));
                 EventDispatcher.Publish(new EventData(EventCategoryType.Game, EventActionType.OnLose, null));
             }

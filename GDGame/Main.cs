@@ -146,7 +146,23 @@ namespace GDGame
             soundManager.Add(new GDLibrary.Managers.Cue("smokealarm",
                 Content.Load<SoundEffect>("Assets/Audio/Effects/smokealarm1"), SoundCategoryType.Alarm, new Vector3(1, 0, 0), false));
 
-            //to do..add more sounds
+            //soundManager.Add(new GDLibrary.Managers.Cue("thing", Content.Load<>))
+
+
+            soundManager.Add(new GDLibrary.Managers.Cue("hitgood",
+                Content.Load<SoundEffect>("Assets/Audio/Effects/hitgood"), SoundCategoryType.Explosion, new Vector3(1, 0, 0), false));
+
+            soundManager.Add(new GDLibrary.Managers.Cue("hitbad",
+                Content.Load<SoundEffect>("Assets/Audio/Effects/hitbad"), SoundCategoryType.Explosion, new Vector3(1, 0, 0), false));
+
+            soundManager.Add(new GDLibrary.Managers.Cue("bg1",
+                Content.Load<SoundEffect>("Assets/Audio/bg/bg1"), SoundCategoryType.BackgroundMusic, new Vector3(1, 0, 0), false));
+
+            soundManager.Add(new GDLibrary.Managers.Cue("bg2",
+                Content.Load<SoundEffect>("Assets/Audio/bg/bg2"), SoundCategoryType.BackgroundMusic, new Vector3(1, 0, 0), true));
+
+            soundManager.Add(new GDLibrary.Managers.Cue("bg3",
+                Content.Load<SoundEffect>("Assets/Audio/bg/bg3"), SoundCategoryType.BackgroundMusic, new Vector3(1, 0, 0), true));
         }
 
         private void LoadEffects()
@@ -1634,6 +1650,8 @@ namespace GDGame
             score += currentLevel;
             currentSpeed = BASESPEED - (score * currentLevel);
 
+            
+
             if(currentHealth <= 0)
             {
                 GameOver(score);
@@ -1728,10 +1746,20 @@ namespace GDGame
             if (keyboardManager.IsFirstKeyPress(Keys.F1))
             {
                 // soundManager.Play2D("smokealarm");
+                AudioListener listener = new AudioListener();
+                listener.Position = new Vector3(0, 5, 50);
+                listener.Forward = -Vector3.UnitZ;
+                listener.Up = Vector3.UnitY;
 
-                object[] parameters = { "smokealarm" };
+                AudioEmitter emitter = new AudioEmitter();
+                emitter.DopplerScale = 1;
+                emitter.Position = new Vector3(0, 5, 0);
+                emitter.Forward = Vector3.UnitZ;
+                emitter.Up = Vector3.UnitY;
+
+                object[] parameters = { "hitbad", listener, emitter };
                 EventDispatcher.Publish(new EventData(EventCategoryType.Sound,
-                    EventActionType.OnPlay2D, parameters));
+                    EventActionType.OnPlay3D, parameters));
             }
             else if (keyboardManager.IsFirstKeyPress(Keys.F2))
             {
@@ -1743,7 +1771,7 @@ namespace GDGame
             }
             else if (keyboardManager.IsFirstKeyPress(Keys.F3))
             {
-                soundManager.Stop("smokealarm");
+                soundManager.Stop("bg1");
 
                 //or stop with an event
                 //object[] parameters = { "smokealarm" };
@@ -1752,7 +1780,8 @@ namespace GDGame
             }
             else if (keyboardManager.IsFirstKeyPress(Keys.F4))
             {
-                soundManager.SetMasterVolume(0);
+                //soundManager.SetMasterVolume(0);
+                soundManager.ChangeVolume("bg1",0.2f);
             }
             else if (keyboardManager.IsFirstKeyPress(Keys.F5))
             {
@@ -1771,7 +1800,7 @@ namespace GDGame
                 emitter.Forward = Vector3.UnitZ;
                 emitter.Up = Vector3.UnitY;
 
-                object[] parameters = { "smokealarm", listener, emitter };
+                object[] parameters = { "bg1", listener, emitter };
                 EventDispatcher.Publish(new EventData(EventCategoryType.Sound,
                     EventActionType.OnPlay3D, parameters));
             }
