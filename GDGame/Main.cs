@@ -414,7 +414,7 @@ namespace GDGame
             string text = "SCORE -[0]- ";
             Vector2 originalDimensions = spriteFont.MeasureString(text);
 
-            transform2D = new Transform2D(new Vector2(resolutionX / 2 + (originalDimensions.X / 2), 40), 0, new Vector2(2, 2), new Vector2(originalDimensions.X, originalDimensions.Y), new Integer2(originalDimensions));
+            transform2D = new Transform2D(new Vector2(resolutionX / 2 + (originalDimensions.X / 2), 45), 0, new Vector2(2, 2), new Vector2(originalDimensions.X, originalDimensions.Y), new Integer2(originalDimensions));
 
             UITextObject uiTextObject = new UITextObject("score", ActorType.UIText,
                 StatusType.Update | StatusType.Drawn, transform2D, new Color(255, 0, 255, 1),
@@ -425,7 +425,14 @@ namespace GDGame
             //uiTextObject.ControllerList.Add(new UIMouseOverController("moc1", ControllerType.MouseOver,
             //     mouseManager, Color.Red, Color.White));
 
+
             uiManager.Add(uiTextObject);
+
+            //uiTextObject.Transform2D.Translation = new Vector2(resolutionX / 2 + (originalDimensions.X / 2), 200);
+            //uiTextObject.Transform2D.Scale = new Vector2(10, 10);
+
+            menuManager.Add("exit", uiTextObject);
+            
             uiTextObject = null;
             //spriteFont = Content.Load<SpriteFont>("Assets/Fonts/ui");
 
@@ -433,7 +440,7 @@ namespace GDGame
             text = "SHIELD HEALTH -[0]- ";
             originalDimensions = spriteFont.MeasureString(text);
 
-            transform2D = new Transform2D(new Vector2(resolutionX / 2 + (originalDimensions.X / 2) + (500), 40), 0, new Vector2(2, 2), new Vector2(originalDimensions.X, originalDimensions.Y), new Integer2(originalDimensions));
+            transform2D = new Transform2D(new Vector2(resolutionX / 2 + (originalDimensions.X / 2) + (500), 45), 0, new Vector2(2, 2), new Vector2(originalDimensions.X, originalDimensions.Y), new Integer2(originalDimensions));
 
             uiTextObject = new UITextObject("health", ActorType.UIText,
                 StatusType.Update | StatusType.Drawn, transform2D, new Color(255, 0, 255, 1),

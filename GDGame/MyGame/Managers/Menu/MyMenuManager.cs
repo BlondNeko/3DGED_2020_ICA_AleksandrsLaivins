@@ -31,6 +31,7 @@ namespace GDGame.MyGame.Managers
                     this.StatusType = StatusType.Off;
                 else if(eventData.EventActionType == EventActionType.OnLose)
                 {
+                    SetScene("exit");
                     AudioListener listener = new AudioListener();
                     listener.Position = new Vector3(0, 5, 50);
                     listener.Forward = -Vector3.UnitZ;
