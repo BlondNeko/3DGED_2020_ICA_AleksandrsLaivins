@@ -3,6 +3,7 @@ using GDLibrary.Enums;
 using GDLibrary.Events;
 using GDLibrary.Managers;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace GDGame.MyGame.Managers
@@ -67,6 +68,20 @@ namespace GDGame.MyGame.Managers
             switch (uIButtonObject.ID)
             {
                 case "play":
+                    AudioListener listener = new AudioListener();
+                    listener.Position = new Vector3(0, 5, 50);
+                    listener.Forward = -Vector3.UnitZ;
+                    listener.Up = Vector3.UnitY;
+
+                    AudioEmitter emitter = new AudioEmitter();
+                    emitter.DopplerScale = 1;
+                    emitter.Position = new Vector3(0, 5, 0);
+                    emitter.Forward = Vector3.UnitZ;
+                    emitter.Up = Vector3.UnitY;
+
+                    object[] parameters = { "bg1", listener, emitter };
+                    EventDispatcher.Publish(new EventData(EventCategoryType.Sound,
+                        EventActionType.OnPlay3D, parameters));
                     EventDispatcher.Publish(new EventData(EventCategoryType.Menu, EventActionType.OnPlay, null));
                     break;
 

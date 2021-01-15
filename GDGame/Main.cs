@@ -658,30 +658,10 @@ namespace GDGame
 
             transform3D = new Transform3D(translation, rotationInDegrees, Vector3.One, new Vector3(0, -0.32f, -1), Vector3.UnitY);
 
-            camera3D = new Camera3D(" Fixed Camera - Main ",
-                ActorType.Camera3D, StatusType.Update, transform3D,
-                ProjectionParameters.StandardDeepSixteenTen,
-                viewPort);
-
-            cameraManager.Add(camera3D);
-
-            #endregion Fixed
-
-            #region Fixed
-
-            translation = new Vector3(0, 300, 200);
-
-            rotationInDegrees = new Vector3(0, 0, 0);
-
-            transform3D = new Transform3D(translation, rotationInDegrees, Vector3.One, new Vector3(0, -0.32f, -1), Vector3.UnitY);
-
             camera3D = new Camera3D(" Fixed Camera - Main 2",
                 ActorType.Camera3D, StatusType.Update, transform3D,
                 ProjectionParameters.StandardDeepSixteenTen,
                 viewPort);
-
-            
-            
 
             Transform3DCurve curveA = new Transform3DCurve(CurveLoopType.Constant); //experiment with other CurveLoopTypes
             curveA.Add(new Vector3(0, 5, 100), -Vector3.UnitZ, Vector3.UnitY, 0); //start
@@ -703,7 +683,25 @@ namespace GDGame
 
             camera3D.ControllerList.Add(new Curve3DController("intro curve", ControllerType.Curve, transform3DCurveDictionary["cameraCurve"]));
 
-            //camera3D.ControllerList.Add(new Curve3DController(GameConstants.Camera_NonCollidableCurveMainArena, ControllerType.Curve, transform3DCurveDictionary["cameraCurve2"]));
+            camera3D.ControllerList.Add(new Curve3DController(GameConstants.Camera_NonCollidableCurveMainArena, ControllerType.Curve, transform3DCurveDictionary["cameraCurve2"]));
+
+            cameraManager.Add(camera3D);
+
+            #endregion Fixed
+
+
+            #region Fixed
+
+            translation = new Vector3(0, 300, 200);
+
+            rotationInDegrees = new Vector3(0, 0, 0);
+
+            transform3D = new Transform3D(translation, rotationInDegrees, Vector3.One, new Vector3(0, -0.32f, -1), Vector3.UnitY);
+
+            camera3D = new Camera3D(" Fixed Camera - Main ",
+                ActorType.Camera3D, StatusType.Update, transform3D,
+                ProjectionParameters.StandardDeepSixteenTen,
+                viewPort);
 
             cameraManager.Add(camera3D);
 
@@ -1827,7 +1825,7 @@ namespace GDGame
             else if (keyboardManager.IsFirstKeyPress(Keys.F4))
             {
                 //soundManager.SetMasterVolume(0);
-                soundManager.ChangeVolume("bg1",0.2f);
+                soundManager.ChangeVolume("bg1",1f);
             }
             else if (keyboardManager.IsFirstKeyPress(Keys.F5))
             {
