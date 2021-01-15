@@ -92,7 +92,8 @@
         Progress,
         ScaleLerpOverTime,
 
-        Score
+        Score,
+        Health
     }
 
     /// <summary>

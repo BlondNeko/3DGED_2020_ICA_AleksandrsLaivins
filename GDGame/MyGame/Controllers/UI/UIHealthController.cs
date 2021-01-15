@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework;
 
 namespace GDGame.Controllers
 {
-    public class UIScoreController : Controller
+    public class UIHealthController : Controller
     {
         private int currentValue;
         private int maxValue;
@@ -21,7 +21,19 @@ namespace GDGame.Controllers
             }
             set
             {
-                currentValue = value;
+                currentValue = ((value >= 0) && (value <= maxValue)) ? value : 0;
+            }
+        }
+
+        public int MaxValue
+        {
+            get
+            {
+                return maxValue;
+            }
+            set
+            {
+                maxValue = (value >= 0) ? value : 0;
             }
         }
 
@@ -33,14 +45,15 @@ namespace GDGame.Controllers
             }
             set
             {
-                startValue = currentValue;
+                startValue = (value >= 0) ? value : 0;
             }
         }
 
-        public UIScoreController(string id, ControllerType controllerType, int startValue)
+        public UIHealthController(string id, ControllerType controllerType, int startValue, int maxValue)
             : base(id, controllerType)
         {
             StartValue = startValue;
+            MaxValue = maxValue;
             CurrentValue = startValue;
 
             //listen for UI events to change the SourceRectangle
@@ -49,14 +62,9 @@ namespace GDGame.Controllers
 
         private void HandleEvents(EventData eventData)
         {
-            if (eventData.EventActionType == EventActionType.OnScoreDelta)
+            if (eventData.EventActionType == EventActionType.OnHealthDelta)
             {
                 CurrentValue = currentValue + (int)eventData.Parameters[0];
-                
-            }
-            else if(eventData.EventActionType == EventActionType.OnWin)
-            {
-
             }
         }
 
@@ -66,7 +74,7 @@ namespace GDGame.Controllers
 
             if (drawnActor != null)
             {
-                UpdateScore(drawnActor);
+                UpdateHealth(drawnActor);
             }
 
             base.Update(gameTime, actor);
@@ -76,14 +84,14 @@ namespace GDGame.Controllers
         /// Uses the currentValue to set the source rectangle width of the parent UITextureObject
         /// </summary>
         /// <param name="drawnActor">Parent to which this controller is attached</param>
-        private void UpdateScore(UITextObject drawnActor)
+        private void UpdateHealth(UITextObject drawnActor)
         {
-            drawnActor.Text = "SCORE -[" + currentValue + "]- ";
-        }
+            if (currentValue < 0)
+            {
+                EventDispatcher.Publish(new EventData(EventCategoryType.Menu, EventActionType.OnPause, null));
+            }
 
-        private void CenterText(UITextObject drawnActor)
-        {
-            //drawnActor.
+            drawnActor.Text = "SCORE -[" + currentValue + "]- ";
         }
 
         //to do...Equals, GetHashCode, Clone

@@ -39,7 +39,6 @@ namespace GDGame
         private const int BASESPEED = 7500;
 
         private int score;
-        private const int LEVELUPSCORE = 1000;
 
         private float currentSpeed = BASESPEED;
         private int currentLevel = 1;
@@ -402,10 +401,26 @@ namespace GDGame
                 StatusType.Update | StatusType.Drawn, transform2D, new Color(255, 0, 255, 1),
                 0, SpriteEffects.None, text, spriteFont);
 
-            uiTextObject.ControllerList.Add(new UIScoreController("scoreUpdate", ControllerType.Score, score, LEVELUPSCORE));
+            uiTextObject.ControllerList.Add(new UIScoreController("scoreUpdate", ControllerType.Score, score));
 
             //uiTextObject.ControllerList.Add(new UIMouseOverController("moc1", ControllerType.MouseOver,
             //     mouseManager, Color.Red, Color.White));
+
+            uiManager.Add(uiTextObject);
+
+            spriteFont = Content.Load<SpriteFont>("Assets/Fonts/ui");
+
+            //calculate how big the text is in (w,h)
+            text = "Health -[0]- ";
+            originalDimensions = spriteFont.MeasureString(text);
+
+            transform2D = new Transform2D(new Vector2(resolutionX / 2 + (originalDimensions.X / 2) + (500), 40), 0, new Vector2(2, 2), new Vector2(originalDimensions.X, originalDimensions.Y), new Integer2(originalDimensions));
+
+            uiTextObject = new UITextObject("health", ActorType.UIText,
+                StatusType.Update | StatusType.Drawn, transform2D, new Color(255, 0, 255, 1),
+                0, SpriteEffects.None, text, spriteFont);
+
+            uiTextObject.ControllerList.Add(new UIScoreController("healtheUpdate", ControllerType.Health, currentHealth));
 
             uiManager.Add(uiTextObject);
 
@@ -1577,7 +1592,9 @@ namespace GDGame
 
         private void GameOver(int score)
         {
+
             //gameover screen, reset or quit
+
         }
 
         #endregion Initialization - Vertices, Archetypes, Helpers, Drawn Content(e.g. Skybox)
@@ -1606,7 +1623,7 @@ namespace GDGame
         protected override void Update(GameTime gameTime)
         {
             score += currentLevel;
-            currentSpeed = BASESPEED - (score * 1f);
+            currentSpeed = BASESPEED - (score * currentLevel);
 
             if(currentHealth <= 0)
             {
@@ -1780,16 +1797,6 @@ namespace GDGame
             {
                 EventDispatcher.Publish(new EventData(EventCategoryType.Menu, EventActionType.OnPause, null));
             }
-
-            if (keyboardManager.IsFirstKeyPress(Keys.B))
-            {
-                score += 10;
-                object[] parameters = { 10 }; 
-                EventDispatcher.Publish(new EventData(EventCategoryType.UI, EventActionType.OnScoreDelta, parameters));
-
-            }
-
-            
 
             //EventDispatcher.Publish(new EventData(
             //EventCategoryType.UI, 
